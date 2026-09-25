@@ -1,0 +1,14 @@
+CAMPUSFIND — MONGODB ATLAS
+
+The backend .env uses the MongoDB Atlas connection that was already present in the original CampusFind project.
+
+If the browser shows “MongoDB offline”:
+1. Open MongoDB Atlas.
+2. Open the CampusFind cluster.
+3. Go to Security -> Network Access.
+4. Add the IP/network from the computer running CampusFind.
+5. Make sure the database user/password are still active.
+6. Restart START_CAMPUSFIND.bat.
+7. Open http://localhost:5000/api/status. It should say mongo:true.
+
+The server retries the Atlas connection automatically every 15 seconds, so you do not need to restart it after fixing the Atlas network rule.

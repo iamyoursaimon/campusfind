@@ -1,0 +1,1389 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Post a lost or found item to the CampusFind community."
+  />
+
+  <title>Post an Item | CampusFind</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --ink: #12213c;
+      --muted: #66738b;
+      --blue: #3158d9;
+      --blue2: #5b83ff;
+      --soft: #e9efff;
+      --line: #dce4f2;
+      --card: rgba(255, 255, 255, 0.84);
+      --input: rgba(255, 255, 255, 0.78);
+      --shadow: rgba(31, 61, 122, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "DM Sans", sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 5% 5%,
+          rgba(84, 134, 255, 0.18),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 95% 90%,
+          rgba(113, 91, 255, 0.12),
+          transparent 28%
+        ),
+        linear-gradient(145deg, #fbfcff, #eef3ff);
+    }
+
+    body.dark {
+      --ink: #edf4ff;
+      --muted: #a5b5cf;
+      --blue: #83a5ff;
+      --blue2: #a1b8ff;
+      --soft: rgba(83, 125, 235, 0.18);
+      --line: rgba(154, 178, 224, 0.18);
+      --card: rgba(15, 31, 52, 0.86);
+      --input: rgba(16, 36, 60, 0.9);
+      --shadow: rgba(0, 0, 0, 0.28);
+
+      background:
+        radial-gradient(
+          circle at 5% 5%,
+          rgba(58, 96, 190, 0.2),
+          transparent 30%
+        ),
+        linear-gradient(145deg, #081321, #10233a);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1080px, calc(100% - 40px));
+      margin: auto;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      border-bottom: 1px solid var(--line);
+
+      background: rgba(248, 250, 255, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    body.dark .header {
+      background: rgba(8, 19, 33, 0.8);
+    }
+
+    .nav {
+      min-height: 78px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    /* Magnifying glass logo */
+    .mark {
+      position: relative;
+
+      width: 43px;
+      height: 43px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 14px;
+
+      color: white;
+
+      background:
+        linear-gradient(
+          145deg,
+          #234bc7,
+          #5486ff
+        );
+
+      box-shadow:
+        0 10px 24px rgba(49, 88, 217, 0.28);
+
+      overflow: hidden;
+    }
+
+    .mark::before {
+      content: "";
+
+      width: 16px;
+      height: 16px;
+
+      border: 3px solid white;
+      border-radius: 50%;
+
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    .mark::after {
+      content: "";
+
+      width: 11px;
+      height: 3px;
+
+      border-radius: 10px;
+
+      background: white;
+
+      position: absolute;
+
+      transform: rotate(45deg);
+
+      top: 28px;
+      left: 27px;
+    }
+
+    .brand strong {
+      display: block;
+
+      font:
+        700 1rem "Space Grotesk",
+        sans-serif;
+    }
+
+    .brand small {
+      display: block;
+
+      color: var(--muted);
+
+      font-size: 0.6rem;
+      font-weight: 800;
+
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .actions a,
+    .theme {
+      min-height: 40px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 0.62rem 0.82rem;
+
+      border: 1px solid var(--line);
+      border-radius: 10px;
+
+      background: var(--card);
+
+      color: var(--muted);
+
+      font-size: 0.8rem;
+      font-weight: 800;
+
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .actions a:hover,
+    .theme:hover {
+      color: var(--blue);
+
+      border-color: var(--blue);
+
+      transform: translateY(-2px);
+
+      box-shadow: 0 8px 20px var(--shadow);
+    }
+
+    .theme {
+      width: 40px;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .theme svg {
+      width: 17px;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .main {
+      padding: 68px 0 90px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+
+      color: var(--blue);
+
+      font-size: 0.72rem;
+      font-weight: 800;
+
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+
+      width: 25px;
+      height: 2px;
+
+      border-radius: 20px;
+
+      background: var(--blue);
+    }
+
+    .main h1 {
+      margin: 14px 0 10px;
+
+      font:
+        700 clamp(2.5rem, 7vw, 5rem) / 0.95
+        "Space Grotesk",
+        sans-serif;
+
+      letter-spacing: -0.07em;
+    }
+
+    .intro {
+      max-width: 680px;
+
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    /* =========================
+       FORM LAYOUT
+    ========================= */
+
+    .form-layout {
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1.2fr)
+        minmax(300px, 0.8fr);
+
+      gap: 22px;
+
+      margin-top: 36px;
+    }
+
+    .form-card,
+    .preview {
+      padding: 25px;
+
+      border: 1px solid var(--line);
+      border-radius: 24px;
+
+      background: var(--card);
+
+      box-shadow:
+        0 24px 70px var(--shadow);
+
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .form-card {
+      display: grid;
+      gap: 17px;
+
+      animation: cardIn 0.55s ease both;
+    }
+
+    .preview {
+      align-self: start;
+
+      position: sticky;
+      top: 105px;
+
+      animation: cardIn 0.7s 0.08s ease both;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-card h2,
+    .preview h2 {
+      margin: 0;
+
+      font:
+        700 1.35rem "Space Grotesk",
+        sans-serif;
+    }
+
+    /* =========================
+       LOST / FOUND
+    ========================= */
+
+    .choice-row {
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 10px;
+    }
+
+    .choice {
+      position: relative;
+      display: block;
+    }
+
+    .choice input {
+      position: absolute;
+
+      width: 1px;
+      height: 1px;
+
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .choice span {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      min-height: 54px;
+
+      padding: 14px;
+
+      border: 1px solid var(--line);
+      border-radius: 13px;
+
+      color: var(--muted);
+
+      font-weight: 800;
+
+      cursor: pointer;
+
+      transition:
+        all 0.22s ease;
+    }
+
+    .choice span:hover {
+      border-color: var(--blue);
+
+      transform: translateY(-1px);
+    }
+
+    .choice input:checked + span {
+      border-color: var(--blue);
+
+      color: var(--blue);
+
+      background: var(--soft);
+
+      box-shadow:
+        0 8px 22px rgba(49, 88, 217, 0.1);
+    }
+
+    /* =========================
+       INPUTS
+    ========================= */
+
+    label {
+      display: grid;
+
+      gap: 7px;
+
+      color: var(--muted);
+
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+
+      padding: 0.88rem 1rem;
+
+      border: 1px solid var(--line);
+      border-radius: 12px;
+
+      outline: none;
+
+      color: var(--ink);
+
+      background: var(--input);
+
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--blue);
+
+      box-shadow:
+        0 0 0 4px rgba(49, 88, 217, 0.1);
+    }
+
+    textarea {
+      min-height: 125px;
+
+      resize: vertical;
+
+      line-height: 1.55;
+    }
+
+    /* =========================
+       SUBMIT BUTTON
+    ========================= */
+
+    button.submit {
+      min-height: 50px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+
+      border: 0;
+      border-radius: 12px;
+
+      color: white;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--blue),
+          var(--blue2)
+        );
+
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 12px 28px rgba(49, 88, 217, 0.25);
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    button.submit:hover {
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 16px 34px rgba(49, 88, 217, 0.32);
+    }
+
+    button.submit:active {
+      transform: translateY(0);
+    }
+
+    button.submit svg {
+      width: 17px;
+    }
+
+    /* =========================
+       PREVIEW
+    ========================= */
+
+    .preview-art {
+      position: relative;
+
+      display: grid;
+      place-items: center;
+
+      height: 230px;
+
+      margin: 17px 0;
+
+      border-radius: 20px;
+
+      color: var(--blue);
+
+      background:
+        radial-gradient(
+          circle at 30% 25%,
+          rgba(255, 255, 255, 0.8),
+          transparent 35%
+        ),
+        linear-gradient(
+          145deg,
+          #e7edff,
+          #d9e4ff
+        );
+
+      transform:
+        perspective(800px)
+        rotateX(5deg)
+        rotateY(-5deg);
+
+      box-shadow:
+        0 20px 35px rgba(49, 88, 217, 0.14);
+
+      overflow: hidden;
+    }
+
+    body.dark .preview-art {
+      background:
+        radial-gradient(
+          circle at 30% 25%,
+          rgba(105, 143, 255, 0.18),
+          transparent 35%
+        ),
+        linear-gradient(
+          145deg,
+          #142c4a,
+          #0e2139
+        );
+    }
+
+    .preview-art::before,
+    .preview-art::after {
+      content: "";
+
+      position: absolute;
+
+      width: 80px;
+      height: 80px;
+
+      border: 1px solid rgba(49, 88, 217, 0.12);
+
+      border-radius: 50%;
+
+      animation: floatCircle 5s ease-in-out infinite;
+    }
+
+    .preview-art::before {
+      top: -25px;
+      right: -20px;
+    }
+
+    .preview-art::after {
+      bottom: -35px;
+      left: -20px;
+
+      animation-delay: 1.5s;
+    }
+
+    @keyframes floatCircle {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .preview-art svg {
+      width: 72px;
+      height: 72px;
+
+      animation:
+        iconFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes iconFloat {
+      0%,
+      100% {
+        transform: translateY(0) rotate(0);
+      }
+
+      50% {
+        transform: translateY(-7px) rotate(2deg);
+      }
+    }
+
+    .preview p {
+      color: var(--muted);
+
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+
+    .notice {
+      margin-top: 15px;
+
+      padding: 13px;
+
+      border-radius: 13px;
+
+      color: var(--muted);
+
+      background: var(--soft);
+
+      font-size: 0.76rem;
+      line-height: 1.5;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position: fixed;
+
+      left: 50%;
+      bottom: 24px;
+
+      z-index: 500;
+
+      max-width: calc(100% - 30px);
+
+      padding: 14px 18px;
+
+      border-radius: 13px;
+
+      color: white;
+
+      background: #12213c;
+
+      box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.2);
+
+      transform:
+        translate(-50%, 160%);
+
+      opacity: 0;
+
+      transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+
+      opacity: 1;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 800px) {
+      .container {
+        width: min(100% - 24px, 650px);
+      }
+
+      .main {
+        padding: 48px 0 65px;
+      }
+
+      .form-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .preview {
+        position: relative;
+        top: auto;
+      }
+
+      .actions a:first-child {
+        display: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .nav {
+        min-height: 70px;
+      }
+
+      .brand small {
+        display: none;
+      }
+
+      .actions a:nth-child(2) {
+        display: none;
+      }
+
+      .main h1 {
+        font-size: 3rem;
+      }
+
+      .choice-row {
+        grid-template-columns: 1fr;
+      }
+
+      .form-card,
+      .preview {
+        padding: 19px;
+
+        border-radius: 19px;
+      }
+    }
+  </style>
+
+  <!-- Keep your existing project CSS if needed -->
+  <link rel="stylesheet" href="app.css" />
+</head>
+
+<body>
+
+  <!-- =========================
+       HEADER
+  ========================= -->
+
+  <header class="header">
+    <div class="container nav">
+
+      <a class="brand" href="index.html">
+
+        <!-- Magnifying glass logo -->
+        <span class="mark" aria-label="CampusFind logo"></span>
+
+        <span>
+          <strong>CampusFind</strong>
+          <small>Premier University</small>
+        </span>
+
+      </a>
+
+      <div class="actions">
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="lost-found.html">
+          Lost &amp; Found
+        </a>
+
+        <button
+          class="theme"
+          id="themeToggle"
+          type="button"
+          aria-label="Toggle theme"
+        >
+          <i data-lucide="sun-medium"></i>
+        </button>
+
+        <a href="login.html">
+          Sign In
+        </a>
+
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- =========================
+       MAIN
+  ========================= -->
+
+  <main class="container main">
+
+    <span class="eyebrow">
+      Community report
+    </span>
+
+    <h1>
+      Post what you lost
+      <br />
+      or found.
+    </h1>
+
+    <p class="intro">
+      Create a clear report so the right student can find it
+      across the Premier University campus network.
+    </p>
+
+
+    <div class="form-layout">
+
+      <!-- =========================
+           FORM
+      ========================= -->
+
+      <form
+        class="form-card"
+        id="reportForm"
+      >
+
+        <h2>
+          Item details
+        </h2>
+
+
+        <!-- Lost / Found -->
+
+        <div class="choice-row">
+
+          <label class="choice">
+
+            <input
+              type="radio"
+              name="status"
+              value="lost"
+              checked
+            />
+
+            <span>
+              I lost it
+            </span>
+
+          </label>
+
+
+          <label class="choice">
+
+            <input
+              type="radio"
+              name="status"
+              value="found"
+            />
+
+            <span>
+              I found it
+            </span>
+
+          </label>
+
+        </div>
+
+
+        <!-- Item -->
+
+        <label>
+          Item name
+
+          <input
+            name="title"
+            required
+            placeholder="e.g. Black wallet"
+          />
+        </label>
+
+
+        <!-- Category -->
+
+        <label>
+          Item type
+
+          <select
+            name="category"
+            required
+          >
+            <option value="">
+              Choose a type
+            </option>
+
+            <option>
+              Wallet
+            </option>
+
+            <option>
+              Keys
+            </option>
+
+            <option>
+              Books / Notebook
+            </option>
+
+            <option>
+              ID Card
+            </option>
+
+            <option>
+              Electronics
+            </option>
+
+            <option>
+              Other
+            </option>
+          </select>
+
+        </label>
+
+
+        <!-- Campus -->
+
+        <label>
+          Campus
+
+          <select
+            name="campus"
+            required
+          >
+            <option value="">
+              Choose a campus
+            </option>
+
+            <option>
+              GEC Campus
+            </option>
+
+            <option>
+              Hazari Line Campus
+            </option>
+
+            <option>
+              WASA Campus
+            </option>
+          </select>
+
+        </label>
+
+
+        <!-- Location -->
+
+        <label>
+          Last known location
+
+          <input
+            name="location"
+            required
+            placeholder="e.g. Central library, second floor"
+          />
+        </label>
+
+
+        <!-- Description -->
+
+        <label>
+          More details
+
+          <textarea
+            name="description"
+            required
+            placeholder="Color, identifying marks, time, and anything helpful..."
+          ></textarea>
+
+        </label>
+
+        <label>
+          Item photo
+
+          <input name="image" type="file" accept="image/*" />
+        </label>
+
+
+        <!-- Email -->
+
+        <label>
+          Contact email
+
+          <input
+            name="email"
+            type="email"
+            required
+            placeholder="you@example.com"
+          />
+
+        </label>
+
+
+        <!-- Submit -->
+
+        <button
+          class="submit"
+          type="submit"
+        >
+          <i data-lucide="send"></i>
+
+          Publish report
+        </button>
+
+      </form>
+
+
+      <!-- =========================
+           PREVIEW
+      ========================= -->
+
+      <aside class="preview">
+
+        <h2>
+          Make it easy to match
+        </h2>
+
+        <div class="preview-art">
+
+          <i
+            data-lucide="package-search"
+          ></i>
+
+        </div>
+
+        <p>Your report is published to MongoDB and appears across CampusFind immediately.</p>
+
+        <div class="notice">
+          <strong>Connected mode:</strong>
+          Images are stored as persistent data references with the report.
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+
+  <!-- Toast -->
+
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+
+  <script>
+
+    const body = document.body;
+
+    const themeToggle =
+      document.getElementById("themeToggle");
+
+    const reportForm =
+      document.getElementById("reportForm");
+
+    const toast =
+      document.getElementById("toast");
+
+
+    /* =========================
+       THEME
+    ========================= */
+
+    function updateThemeIcon() {
+
+      const isDark =
+        body.classList.contains("dark");
+
+      themeToggle.innerHTML =
+        `<i data-lucide="${
+          isDark
+            ? "moon"
+            : "sun-medium"
+        }"></i>`;
+
+      lucide.createIcons();
+    }
+
+
+    if (
+      localStorage.getItem("campusFindTheme")
+      === "dark"
+    ) {
+
+      body.classList.add("dark");
+
+    }
+
+
+    themeToggle.addEventListener(
+      "click",
+      () => {
+
+        body.classList.toggle("dark");
+
+        localStorage.setItem(
+          "campusFindTheme",
+          body.classList.contains("dark")
+            ? "dark"
+            : "light"
+        );
+
+        updateThemeIcon();
+
+      }
+    );
+
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    function showToast(message) {
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      }, 3200);
+
+    }
+
+    function readApiResponse(response) {
+      return response.text().then((raw) => {
+        if (!raw.trim()) return { success: false, message: `Server returned an empty response (${response.status}).` };
+        try { return JSON.parse(raw); } catch { return { success: false, message: `Server returned invalid JSON (${response.status}).` }; }
+      });
+    }
+
+    function readImage(file) {
+      if (!file) return Promise.resolve("");
+      if (file.size > 4 * 1024 * 1024) return Promise.reject(new Error("Please choose an image under 4 MB."));
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error("The selected image could not be read."));
+        reader.readAsDataURL(file);
+      });
+    }
+
+
+    /* =========================
+       FORM SUBMIT
+    ========================= */
+
+    reportForm.addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+
+        const data =
+          new FormData(reportForm);
+
+
+        /* Get saved profile */
+
+        let profile = {};
+
+        try {
+
+          profile = JSON.parse(
+            localStorage.getItem(
+              "campusFindProfile"
+            ) || "{}"
+          );
+
+        } catch (error) {
+
+          profile = {};
+
+        }
+
+
+        /* Build report */
+
+        let image = "";
+        try {
+          image = await readImage(data.get("image"));
+        } catch (error) {
+          showToast(error.message);
+          return;
+        }
+
+        const report = {
+
+          id:
+            "report_" +
+            Date.now() +
+            "_" +
+            Math.random()
+              .toString(36)
+              .slice(2, 8),
+
+          status:
+            data.get("status"),
+
+          title:
+            data.get("title"),
+
+          category:
+            data.get("category"),
+
+          campus:
+            data.get("campus"),
+
+          location:
+            data.get("location"),
+
+          description:
+            data.get("description"),
+
+          email:
+            profile.email ||
+            data.get("email"),
+
+          reporterName:
+            profile.fullName ||
+            "CampusFind Student",
+
+          studentId:
+            profile.studentId ||
+            "",
+
+          firebaseUID:
+            localStorage.getItem(
+              "firebaseUID"
+            ) || "",
+
+          image,
+
+          createdAt:
+            new Date().toISOString()
+
+        };
+
+
+        /* =========================
+           API SYNC
+        ========================= */
+
+        let synced = false;
+
+
+        try {
+
+          const response =
+            await fetch(
+              "/api/reports",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify(report)
+              }
+            );
+
+
+          const result = await readApiResponse(response);
+          synced = response.ok && result.success;
+          if (!synced) showToast(result.message || "Could not save the report to MongoDB.");
+
+        } catch (error) {
+
+          synced = false;
+
+        }
+
+
+        /* =========================
+           SUCCESS MESSAGE
+        ========================= */
+
+        if (synced) showToast("Report saved to MongoDB Atlas and published.");
+        else showToast("Report was not published because MongoDB is unavailable.");
+
+
+        /* Reset form */
+
+        reportForm.reset();
+
+
+        /* Go to recent page */
+
+        setTimeout(() => {
+
+          window.location.href =
+            "recent.html";
+
+        }, 900);
+
+      }
+    );
+
+
+    /* Initialize icons */
+
+    lucide.createIcons();
+
+    updateThemeIcon();
+
+  </script>
+
+</body>
+</html>
+```

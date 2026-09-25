@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="description" content="Sign in to CampusFind." />
+
+    <title>Sign In | CampusFind</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="auth.css" />
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="app.css" />
+<script defer src="app.js"></script>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a class="brand" href="index.html">
+            <span class="brand-mark" aria-hidden="true"><i data-lucide="search"></i></span>
+
+            <span>
+                <strong>CampusFind</strong>
+                <small>Premier University</small>
+            </span>
+        </a>
+
+        <div class="nav-actions">
+
+            <a href="index.html">Home</a>
+
+            <a href="lost-found.html">
+                Lost &amp; Found
+            </a>
+
+            <a href="report.html">
+                Post Item
+            </a>
+
+            <button
+                class="theme"
+                type="button"
+                aria-label="Toggle theme"
+            >
+                <i data-lucide="sun-medium"></i>
+            </button>
+
+            <a href="signup.html">
+                Sign Up
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="container main">
+
+    <div class="auth-layout">
+
+        <!-- LEFT SIDE -->
+
+        <section class="auth-art">
+
+            <span
+                class="eyebrow"
+                style="color:#d7e2ff"
+            >
+                CampusFind account
+            </span>
+
+            <h1>
+                Welcome back to your campus network.
+            </h1>
+
+            <p>
+                Track your reports, follow recovered items,
+                and help classmates reconnect with what they lost.
+            </p>
+
+            <div class="art-stack">
+
+                <div class="art-card">
+
+                    <strong>
+                        Black Wallet
+                    </strong>
+
+                    <span>
+                        Found at GEC Campus · Ready to claim
+                    </span>
+
+                </div>
+
+
+                <div class="art-card">
+
+                    <strong>
+                        Student ID Card
+                    </strong>
+
+                    <span>
+                        Lost near Central Library · 2 hours ago
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- LOGIN CARD -->
+
+        <section class="auth-card">
+
+            <span class="eyebrow">
+                Member access
+            </span>
+
+            <h2>
+                Sign in
+            </h2>
+
+            <p class="intro">
+                Use your Gmail or any valid email address to continue to CampusFind.
+            </p>
+
+
+            <form id="loginForm">
+
+                <label>
+                    University email
+
+                    <input
+                        id="email"
+                        type="email"
+                        required
+                        placeholder="yourname@gmail.com"
+                    />
+
+                </label>
+
+
+                <label>
+                    Student ID
+
+                    <div class="student-id-input">
+                        <span>0222510005</span>
+                        <input id="studentIdLast6" inputmode="numeric" maxlength="6" pattern="\d{6}" required placeholder="Last 6 digits" aria-label="Last 6 digits of student ID" />
+                    </div>
+                    <small class="id-help">Campus ID format: 0222510005 + your last 6 digits</small>
+
+                </label>
+
+
+                <label>
+                    Password
+
+                    <input
+                        id="password"
+                        type="password"
+                        required
+                        placeholder="Enter your password"
+                    />
+
+                </label>
+
+
+                <label
+                    style="display:flex;align-items:center;gap:8px;font-weight:600"
+                >
+
+                    <input
+                        id="rememberMe"
+                        type="checkbox"
+                        style="width:auto"
+                    />
+
+                    Keep me signed in
+
+                </label>
+
+
+                <button
+                    class="submit"
+                    id="loginButton"
+                    type="submit"
+                >
+
+                    Sign in
+
+                    <i data-lucide="arrow-right"></i>
+
+                </button>
+
+            </form>
+
+
+            <div
+                class="notice"
+                id="loginMessage"
+                style="margin-top:16px"
+            >
+                Sign in with your CampusFind account.
+            </div>
+
+
+            <p class="switch">
+
+                New to CampusFind?
+
+                <a href="signup.html">
+                    Create an account
+                </a>
+
+            </p>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<!-- Firebase Login -->
+
+<script type="module">
+import { loginUser } from "./auth.js";
+
+const form=document.getElementById("loginForm");
+const emailInput=document.getElementById("email");
+const passwordInput=document.getElementById("password");
+const idLast6=document.getElementById("studentIdLast6");
+const button=document.getElementById("loginButton");
+const message=document.getElementById("loginMessage");
+
+async function readApiResponse(response){
+    const raw=await response.text();
+    if(!raw.trim()) return {success:false,message:`Server returned an empty response (${response.status}).`};
+    try{return JSON.parse(raw)}catch{return {success:false,message:`Server returned invalid JSON (${response.status}).`};}
+}
+
+form.addEventListener("submit", async (event)=>{
+  event.preventDefault();
+  const email=emailInput.value.trim().toLowerCase();
+  const last6=idLast6.value.trim();
+  if(!/^\d{6}$/.test(last6)){ message.textContent="Enter the last 6 digits of your student ID."; return; }
+  button.disabled=true; button.textContent="Signing in..."; message.textContent="Checking your CampusFind account...";
+  const result=await loginUser(email,passwordInput.value);
+  if(!result.success){message.textContent=result.error?.includes("invalid-credential")?"Email or password is incorrect.":result.error;button.disabled=false;return;}
+  const studentId="0222510005"+last6;
+  localStorage.setItem("firebaseUID",result.user.uid);
+  localStorage.setItem("userEmail",result.user.email||email);
+  localStorage.setItem("userStudentId",studentId);
+  let profile={};
+  try{profile=JSON.parse(localStorage.getItem("campusFindProfile")||"{}")}catch{}
+  try{
+    const response=await fetch(`/api/users/profile/${encodeURIComponent(result.user.uid)}`);
+    if(response.ok){const data=await readApiResponse(response);if(data.success)profile={...profile,...data.user};}
+  }catch{}
+  profile={...profile,email:result.user.email||email,studentId,fullName:profile.fullName||((email.split("@")[0]||"Student").replace(/[._-]+/g," ").replace(/\b\w/g,m=>m.toUpperCase())),campus:profile.campus||localStorage.getItem("selectedCampus")||"GEC"};
+  localStorage.setItem("campusFindProfile",JSON.stringify(profile));
+  localStorage.setItem("userName",profile.fullName);localStorage.setItem("selectedCampus",profile.campus);
+  // If this is an older account, migrate the requested 16-digit ID into MongoDB.
+  try{await fetch('/api/users/profile',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...profile,firebaseUID:result.user.uid,studentId})});}catch{}
+  message.textContent="Signed in successfully. Opening your profile...";
+  setTimeout(()=>window.location.href="profile.html",300);
+});
+
+idLast6.addEventListener("input",()=>{idLast6.value=idLast6.value.replace(/\D/g,"").slice(0,6)});
+if(window.lucide)lucide.createIcons();
+</script>
+
+</body>
+
+</html>

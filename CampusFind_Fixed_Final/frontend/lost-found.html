@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Browse lost and found items across Premier University campuses with CampusFind." />
+    <title>Lost &amp; Found | CampusFind</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      :root {
+        --ink: #12213c;
+        --muted: #66738b;
+        --blue: #3158d9;
+        --blue-soft: #e9efff;
+        --green: #168d6a;
+        --red: #d85058;
+        --line: #dce4f2;
+        --paper: #f8faff;
+        --white: #ffffff;
+        --shadow: 0 18px 42px rgba(32, 60, 118, 0.1);
+        --container: min(1180px, calc(100% - 40px));
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family: "DM Sans", sans-serif;
+        background:
+          radial-gradient(circle at 4% 6%, rgba(93, 139, 255, 0.16), transparent 28%),
+          linear-gradient(145deg, #fbfcff 0%, #eff4ff 100%);
+      }
+
+      body.dark {
+        --ink: #edf4ff;
+        --muted: #a5b5cf;
+        --blue: #83a5ff;
+        --blue-soft: rgba(83, 125, 235, 0.18);
+        --line: rgba(154, 178, 224, 0.18);
+        --paper: #091525;
+        --white: #101f34;
+        --shadow: 0 18px 42px rgba(1, 8, 22, 0.4);
+        background:
+          radial-gradient(circle at 4% 6%, rgba(71, 111, 216, 0.22), transparent 28%),
+          linear-gradient(145deg, #081321 0%, #10233a 100%);
+      }
+
+      body.dark .site-header { background: rgba(8, 19, 33, 0.82); border-bottom-color: rgba(154, 178, 224, 0.14); }
+      body.dark .nav-link,
+      body.dark .nav-button:not(.primary),
+      body.dark .stat-pill,
+      body.dark .type-tab { background: rgba(15, 31, 52, 0.72); }
+      body.dark .filter-panel,
+      body.dark .recent-column,
+      body.dark .item-card { background: rgba(15, 31, 52, 0.78); }
+      body.dark .field input,
+      body.dark .field select { color: var(--ink); background: #10243c; }
+      body.dark .item-card { border-color: rgba(154, 178, 224, 0.16); }
+      body.dark .empty-state { background: rgba(15, 31, 52, 0.55); }
+      a { color: inherit; text-decoration: none; }
+      button, input, select { font: inherit; }
+      button { cursor: pointer; }
+      .container { width: var(--container); margin: 0 auto; }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: rgba(248, 250, 255, 0.82);
+        border-bottom: 1px solid rgba(220, 228, 242, 0.76);
+        backdrop-filter: blur(18px);
+      }
+      .navbar {
+        min-height: 78px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+      .brand { display: inline-flex; align-items: center; gap: 11px; }
+      .brand-mark {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-radius: 13px;
+        color: #fff;
+        background: linear-gradient(140deg, #234bc7, #5486ff);
+        box-shadow: 0 12px 22px rgba(49, 88, 217, 0.22);
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+      }
+      .brand-copy { display: grid; gap: 1px; }
+      .brand-copy strong { font-family: "Space Grotesk", sans-serif; letter-spacing: -0.04em; }
+      .brand-copy span { color: var(--muted); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+      .nav-actions { display: flex; align-items: center; gap: 10px; }
+      .theme-toggle {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        color: var(--ink);
+        background: rgba(255,255,255,0.62);
+      }
+      .theme-toggle:hover { color: var(--blue); border-color: #b9c9ef; }
+      .theme-toggle svg { width: 18px; }
+      .nav-link, .nav-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 0.65rem 0.9rem;
+        background: rgba(255,255,255,0.62);
+        color: var(--muted);
+        font-size: 0.86rem;
+        font-weight: 700;
+      }
+      .nav-link:hover, .nav-button:hover { color: var(--blue); border-color: #b9c9ef; }
+      .nav-button.primary { background: var(--blue); color: white; border-color: var(--blue); }
+
+      .page-header { padding: 64px 0 30px; }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--blue);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+      .eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: #42c39a; }
+      h1, h2, h3 { font-family: "Space Grotesk", sans-serif; letter-spacing: -0.05em; }
+      h1 { max-width: 720px; margin: 15px 0 10px; font-size: clamp(2.7rem, 6vw, 5.2rem); line-height: 0.95; }
+      .page-header p { max-width: 620px; margin: 0; color: var(--muted); font-size: 1.05rem; }
+      .header-stat { margin-top: 25px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+      .stat-pill { padding: 0.6rem 0.8rem; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.6); color: var(--muted); font-size: 0.8rem; font-weight: 700; }
+      .stat-pill strong { color: var(--ink); }
+
+      .filter-panel {
+        position: sticky;
+        top: 78px;
+        z-index: 10;
+        display: grid;
+        grid-template-columns: minmax(220px, 1.3fr) repeat(2, minmax(170px, 0.75fr)) auto;
+        gap: 12px;
+        padding: 14px;
+        background: rgba(255,255,255,0.8);
+        border: 1px solid rgba(220,228,242,0.92);
+        border-radius: 18px;
+        box-shadow: 0 14px 36px rgba(32,60,118,0.08);
+        backdrop-filter: blur(18px);
+      }
+      .field { position: relative; }
+      .field > i { position: absolute; left: 13px; top: 50%; width: 17px; color: #7b8ba8; transform: translateY(-50%); pointer-events: none; }
+      .field input, .field select {
+        width: 100%;
+        min-height: 48px;
+        padding: 0 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        outline: none;
+        color: var(--ink);
+        background: #fff;
+      }
+      .field input { padding-left: 42px; }
+      .field select:focus, .field input:focus { border-color: #8ca7ee; box-shadow: 0 0 0 4px rgba(49,88,217,0.1); }
+      .clear-button { min-height: 48px; padding: 0 1rem; border: 0; border-radius: 12px; color: var(--blue); background: var(--blue-soft); font-weight: 800; }
+
+      .type-tabs { display: flex; flex-wrap: wrap; gap: 9px; margin: 24px 0 18px; }
+      .type-tab { padding: 0.62rem 0.9rem; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.56); color: var(--muted); font-size: 0.82rem; font-weight: 800; }
+      .type-tab.active, .type-tab:hover { color: #fff; border-color: var(--blue); background: var(--blue); }
+      .result-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 15px; }
+      .result-row h2 { margin: 0; font-size: 1.4rem; }
+      .result-row span { color: var(--muted); font-size: 0.84rem; }
+
+      .items-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; padding-bottom: 72px; }
+      .item-card {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(255,255,255,0.88);
+        box-shadow: var(--shadow);
+        transition: transform 0.28s ease, box-shadow 0.28s ease;
+      }
+      .item-card:hover { transform: translateY(-7px) rotateX(2deg); box-shadow: 0 24px 52px rgba(32,60,118,0.16); }
+      .item-visual { position: relative; height: 190px; overflow: hidden; background: #e7edff; }
+      .item-visual img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.45s ease; }
+      .item-card:hover .item-visual img { transform: scale(1.07); }
+      .status { position: absolute; top: 13px; right: 13px; padding: 0.38rem 0.62rem; border-radius: 999px; color: #fff; font-size: 0.67rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; }
+      .status.found { background: var(--green); }
+      .status.lost { background: var(--red); }
+      .item-body { padding: 15px; }
+      .item-type { margin: 0 0 5px; color: var(--blue); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
+      .item-body h3 { margin: 0; font-size: 1.25rem; }
+      .item-meta { display: grid; gap: 6px; margin: 10px 0 14px; color: var(--muted); font-size: 0.78rem; }
+      .item-meta span { display: flex; align-items: center; gap: 7px; }
+      .item-meta svg { width: 14px; color: var(--blue); }
+      .item-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .item-actions button { min-height: 38px; border: 0; border-radius: 9px; font-size: 0.76rem; font-weight: 800; }
+      .details { color: var(--blue); background: var(--blue-soft); }
+      .claim { color: #fff; background: var(--blue); }
+      .empty-state { grid-column: 1 / -1; padding: 70px 20px; text-align: center; border: 1px dashed #b8c7e2; border-radius: 18px; color: var(--muted); background: rgba(255,255,255,0.52); }
+      .empty-state i { width: 32px; height: 32px; color: var(--blue); }
+
+      .toast { position: fixed; left: 50%; bottom: 24px; z-index: 30; padding: 0.85rem 1.1rem; border-radius: 12px; color: #fff; background: var(--ink); box-shadow: var(--shadow); transform: translate(-50%, 120%); transition: transform 0.25s ease; }
+      .toast.show { transform: translate(-50%, 0); }
+      .detail-modal { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 20px; background: rgba(8,19,33,.48); backdrop-filter: blur(10px); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s ease; }
+      .detail-modal.open { opacity: 1; visibility: visible; }
+      .detail-dialog { width: min(100%, 620px); max-height: 90vh; overflow: auto; padding: 24px; border: 1px solid rgba(255,255,255,.36); border-radius: 24px; background: rgba(255,255,255,.92); box-shadow: 0 35px 90px rgba(5,15,35,.3); transform: perspective(900px) rotateX(8deg) translateY(24px); transition: transform .3s ease; }
+      body.dark .detail-dialog { background: rgba(15,23,42,.94); border-color: rgba(148,163,184,.2); }
+      .detail-modal.open .detail-dialog { transform: perspective(900px) rotateX(0) translateY(0); }
+      .detail-head { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+      .detail-head h2 { margin:0; font-size:1.6rem; }
+      .detail-close { width:38px; height:38px; border:1px solid var(--line); border-radius:50%; color:var(--ink); background:rgba(255,255,255,.6); }
+      .detail-main { display:grid; grid-template-columns:130px 1fr; gap:18px; align-items:center; margin-top:18px; }
+      .detail-main img { width:130px; height:130px; object-fit:cover; border-radius:17px; }
+      .detail-main p { margin:.45rem 0 0; color:var(--muted); line-height:1.6; }
+      .detail-info { display:grid; gap:8px; margin-top:18px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:.86rem; }
+      .detail-info strong { color:var(--ink); }
+      .comment-box { display:grid; gap:8px; margin-top:20px; padding-top:16px; border-top:1px solid var(--line); }
+      .comment-box label { color:var(--muted); font-size:.8rem; font-weight:800; }
+      .comment-box textarea { min-height:78px; width:100%; padding:.75rem; border:1px solid var(--line); border-radius:11px; color:var(--ink); background:rgba(255,255,255,.7); resize:vertical; }
+      .comment-box button { min-height:42px; border:0; border-radius:10px; color:#fff; background:var(--blue); font-weight:800; }
+      @media (max-width: 620px) { .detail-main { grid-template-columns:80px 1fr; } .detail-main img { width:80px; height:80px; } }
+      @media (max-width: 900px) {
+        .filter-panel { grid-template-columns: 1fr 1fr; }
+        .filter-panel .field:first-child, .clear-button { grid-column: 1 / -1; }
+        .items-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 620px) {
+        :root { --container: min(100% - 24px, 560px); }
+        .navbar { min-height: 68px; }
+        .nav-link { display: none; }
+        .page-header { padding-top: 44px; }
+        .filter-panel { top: 68px; grid-template-columns: 1fr; }
+        .filter-panel .field:first-child, .clear-button { grid-column: auto; }
+        .items-grid { grid-template-columns: 1fr; }
+        .item-visual { height: 210px; }
+      }
+    </style>
+  <link rel="stylesheet" href="app.css" />
+<script defer src="app.js"></script>
+</head>
+  <body>
+    <header class="site-header">
+      <div class="container navbar">
+        <a class="brand" href="index.html" aria-label="CampusFind home">
+          <span class="brand-mark" aria-hidden="true"><i data-lucide="search"></i></span>
+          <span class="brand-copy"><strong>CampusFind</strong><span>Premier University</span></span>
+        </a>
+        <div class="nav-actions">
+          <a class="nav-link" href="index.html#home"><i data-lucide="house"></i> Home</a>
+          <a class="nav-link" href="index.html#how-it-works"><i data-lucide="route"></i> How It Works</a>
+          <a class="nav-link" href="index.html#campuses"><i data-lucide="map-pin"></i> Campuses</a>
+          <a class="nav-link" href="report.html"><i data-lucide="clipboard-pen-line"></i> Post Item</a>
+          <a class="nav-link" href="index.html#reviews"><i data-lucide="star"></i> Reviews</a>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+            <i data-lucide="sun-medium"></i>
+          </button>
+          <a class="nav-button" href="login.html">Sign In</a>
+          <a class="nav-button primary" href="signup.html">Sign Up</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-header">
+        <div class="container">
+          <span class="eyebrow"><i></i> Live campus board</span>
+          <h1>Find what matters.<br />Return what you find.</h1>
+          <p>Browse reported items from across Premier University. Search by item, choose a category, and narrow results to the right campus.</p>
+          <div class="header-stat">
+            <span class="stat-pill"><strong id="totalCount">0</strong> reports</span>
+            <span class="stat-pill"><strong>3</strong> campuses connected</span>
+            <span class="stat-pill">Updated today</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="container" aria-label="Lost and found filters">
+        <div class="filter-panel">
+          <label class="field">
+            <i data-lucide="search"></i>
+            <span class="sr-only">Search items</span>
+            <input id="searchInput" type="search" placeholder="Search wallet, keys, books..." />
+          </label>
+          <label class="field">
+            <span class="sr-only">Filter by item type</span>
+            <select id="categoryFilter">
+              <option value="all">All item types</option>
+              <option value="electronics">Electronics</option>
+              <option value="books">Books / Notebook</option>
+              <option value="wallet">Wallet</option>
+              <option value="id-card">ID Card</option>
+              <option value="calculator">Calculator</option>
+              <option value="keys">Keys</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="sr-only">Filter by campus</span>
+            <select id="campusFilter">
+              <option value="all">All Campuses</option>
+              <option value="gec">GEC Campus</option>
+              <option value="hazari-line">Hazari Line Campus</option>
+              <option value="wasa">WASA Campus</option>
+            </select>
+          </label>
+          <button class="clear-button" id="clearFilters" type="button">Clear filters</button>
+        </div>
+
+        <div class="type-tabs" aria-label="Report status filters">
+          <button class="type-tab active" type="button" data-status="all">All items</button>
+          <button class="type-tab" type="button" data-status="found">Found items</button>
+          <button class="type-tab" type="button" data-status="lost">Lost items</button>
+        </div>
+
+        <div class="result-row">
+          <h2>Recent Lost &amp; Found</h2>
+          <span id="resultSummary">Showing 6 items</span>
+        </div>
+        <div class="items-grid" id="itemsGrid"></div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+    <div class="detail-modal" id="detailModal" aria-hidden="true">
+      <article class="detail-dialog" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+        <div class="detail-head"><h2 id="detailTitle">Item details</h2><button class="detail-close" id="detailClose" type="button" aria-label="Close details"><i data-lucide="x"></i></button></div>
+        <div class="detail-main"><img id="detailImage" src="" alt="" /><div><strong id="detailStatus"></strong><p id="detailDescription"></p></div></div>
+        <div class="detail-info"><div><strong>Report ID:</strong> <span id="detailId"></span></div><div><strong>Campus:</strong> <span id="detailCampus"></span></div><div><strong>Location:</strong> <span id="detailLocation"></span></div><div><strong>Posted by:</strong> <span id="detailOwner"></span></div><div><strong>Gmail:</strong> <span id="detailEmail"></span></div><div><strong>Date:</strong> <span id="detailDate"></span></div></div>
+        <form class="comment-box" id="commentForm"><label for="commentInput">Comment / communicate with the poster</label><textarea id="commentInput" required placeholder="Write a helpful message..."></textarea><button type="submit">Send comment</button></form>
+      </article>
+    </div>
+
+    <script>
+      let items = [];
+
+      const itemsGrid = document.getElementById('itemsGrid');
+      const searchInput = document.getElementById('searchInput');
+      const categoryFilter = document.getElementById('categoryFilter');
+      const campusFilter = document.getElementById('campusFilter');
+      const themeToggle = document.getElementById('themeToggle');
+      const resultSummary = document.getElementById('resultSummary');
+      const totalCount = document.getElementById('totalCount');
+      const toast = document.getElementById('toast');
+      const detailModal = document.getElementById('detailModal');
+      const detailClose = document.getElementById('detailClose');
+      const commentForm = document.getElementById('commentForm');
+      let activeStatus = 'all';
+      let toastTimer;
+
+      function readApiResponse(response) {
+        return response.text().then((raw) => {
+          if (!raw.trim()) return null;
+          try { return JSON.parse(raw); } catch { return null; }
+        });
+      }
+
+      function mapReport(report) {
+        const campus = String(report.campus || '').replace(/ Campus$/i, '');
+        const category = String(report.category || 'other').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        return {
+          ...report,
+          id: report._id,
+          type: `${report.category || 'Other'} · ${report.location || 'Campus'}`,
+          category,
+          campus: campus.toLowerCase().replace(/\s+/g, '-'),
+          campusName: `${campus || 'Campus'} Campus`,
+          date: report.createdAt ? new Date(report.createdAt).toLocaleDateString() : 'Recently',
+          owner: report.reporterName || 'CampusFind Student',
+          image: report.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=85'
+        };
+      }
+
+      async function loadItems() {
+        try {
+          const response = await fetch('/api/reports');
+          const data = await readApiResponse(response);
+          if (!response.ok || !data?.success) throw new Error(data?.message || 'Reports could not be loaded.');
+          items = (data.reports || []).map(mapReport);
+          renderItems();
+          const requestedItem = new URLSearchParams(window.location.search).get('item');
+          const requested = items.find((item) => item.title === requestedItem);
+          if (requested) openDetails(requested.id);
+        } catch (error) {
+          items = [];
+          renderItems();
+          showToast(error.message || 'Reports could not be loaded from MongoDB.');
+        }
+      }
+
+      function openDetails(id) {
+        const item = items.find((entry) => String(entry.id) === String(id));
+        if (!item) return;
+        document.getElementById('detailTitle').textContent = item.title;
+        document.getElementById('detailImage').src = item.image;
+        document.getElementById('detailImage').alt = item.title;
+        document.getElementById('detailStatus').textContent = item.status.toUpperCase();
+        document.getElementById('detailDescription').textContent = item.description;
+        document.getElementById('detailId').textContent = item._id || `CF-${String(item.id).padStart(4, '0')}`;
+        document.getElementById('detailCampus').textContent = item.campusName;
+        document.getElementById('detailLocation').textContent = item.type;
+        document.getElementById('detailOwner').textContent = item.owner;
+        document.getElementById('detailEmail').textContent = `${item.title.toLowerCase().replaceAll(' ', '.')}@gmail.com`;
+        document.getElementById('detailDate').textContent = item.date;
+        detailModal.classList.add('open');
+        detailModal.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeDetails() { detailModal.classList.remove('open'); detailModal.setAttribute('aria-hidden', 'true'); }
+
+      if (localStorage.getItem('campusFindTheme') === 'dark') {
+        document.body.classList.add('dark');
+      }
+
+      function syncThemeIcon() {
+        const icon = themeToggle.querySelector('svg');
+        if (!icon) return;
+        icon.setAttribute('data-lucide', document.body.classList.contains('dark') ? 'moon' : 'sun-medium');
+        lucide.createIcons();
+      }
+
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        localStorage.setItem('campusFindTheme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        syncThemeIcon();
+      });
+
+      function renderItems() {
+        const query = searchInput.value.trim().toLowerCase();
+        const filtered = items.filter((item) => {
+          const searchable = [item.title, item.type, item.description, item.campusName, item.owner].join(' ').toLowerCase();
+          return (activeStatus === 'all' || item.status === activeStatus) &&
+            (categoryFilter.value === 'all' || item.category === categoryFilter.value) &&
+            (campusFilter.value === 'all' || item.campus === campusFilter.value) &&
+            (!query || searchable.includes(query));
+        });
+
+        totalCount.textContent = filtered.length;
+        resultSummary.textContent = `Showing ${filtered.length} item${filtered.length === 1 ? '' : 's'}`;
+        itemsGrid.innerHTML = filtered.length ? filtered.map((item) => `
+          <article class="item-card">
+            <div class="item-visual">
+              <img src="${item.image}" alt="${item.title}" loading="lazy" />
+              <span class="status ${item.status}">${item.status}</span>
+            </div>
+            <div class="item-body">
+              <p class="item-type">${item.type}</p>
+              <h3>${item.title}</h3>
+              <div class="item-meta">
+                <span><i data-lucide="map-pin"></i>${item.campusName} · ${item.date}</span>
+                <span><i data-lucide="file-text"></i>${item.description}</span>
+                <span><i data-lucide="building-2"></i>${item.owner}</span>
+              </div>
+              <div class="item-actions">
+                <button class="details" type="button" data-action="details" data-id="${item.id}" data-title="${item.title}">View Details</button>
+                <button class="claim" type="button" data-action="claim" data-title="${item.title}">${item.status === 'found' ? 'Claim' : 'Report Match'}</button>
+              </div>
+            </div>
+          </article>
+        `).join('') : '<div class="empty-state"><i data-lucide="search-x"></i><h3>No matching items</h3><p>Try another keyword, item type, or campus.</p></div>';
+
+        lucide.createIcons();
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+      }
+
+      [searchInput, categoryFilter, campusFilter].forEach((control) => control.addEventListener('input', renderItems));
+      document.querySelectorAll('.type-tab').forEach((tab) => tab.addEventListener('click', () => {
+        activeStatus = tab.dataset.status;
+        document.querySelectorAll('.type-tab').forEach((item) => item.classList.toggle('active', item === tab));
+        renderItems();
+      }));
+      document.getElementById('clearFilters').addEventListener('click', () => {
+        searchInput.value = '';
+        categoryFilter.value = 'all';
+        campusFilter.value = 'all';
+        activeStatus = 'all';
+        document.querySelectorAll('.type-tab').forEach((item) => item.classList.toggle('active', item.dataset.status === 'all'));
+        renderItems();
+      });
+      itemsGrid.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-action]');
+        if (!button) return;
+        if (button.dataset.action === 'details') return openDetails(button.dataset.id);
+        showToast(`Claim request started for ${button.dataset.title}.`);
+      });
+
+      detailClose.addEventListener('click', closeDetails);
+      detailModal.addEventListener('click', (event) => { if (event.target === detailModal) closeDetails(); });
+      commentForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const itemId = document.getElementById('detailId').textContent;
+        const profile = (() => { try { return JSON.parse(localStorage.getItem('campusFindProfile') || '{}'); } catch { return {}; } })();
+        const text = document.getElementById('commentInput').value.trim();
+        if (!text || !itemId || itemId.startsWith('CF-')) return showToast('This report cannot receive comments yet.');
+        const response = await fetch(`/api/reports/${encodeURIComponent(itemId)}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, name: profile.fullName, email: profile.email, firebaseUID: localStorage.getItem('firebaseUID') || '', studentId: profile.studentId || '' }) });
+        const result = await readApiResponse(response);
+        if (!response.ok || !result?.success) return showToast(result?.message || 'Comment could not be saved.');
+        commentForm.reset();
+        showToast('Comment saved to MongoDB.');
+      });
+
+      renderItems();
+      loadItems();
+      lucide.createIcons();
+      syncThemeIcon();
+    </script>
+  </body>
+</html>

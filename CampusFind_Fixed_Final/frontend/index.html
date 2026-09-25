@@ -1,0 +1,3483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="CampusFind helps Premier University students quickly find lost items, report found items, and reconnect with their campus community."
+    />
+    <title>CampusFind | Premier University</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --bg-2: #eaf1ff;
+        --panel: rgba(255, 255, 255, 0.7);
+        --panel-strong: rgba(255, 255, 255, 0.9);
+        --card: rgba(255, 255, 255, 0.82);
+        --card-2: rgba(245, 248, 255, 0.85);
+        --primary: #1d4ed8;
+        --primary-2: #1d6ef2;
+        --secondary: #0f172a;
+        --secondary-soft: #13355c;
+        --accent: #d9b66a;
+        --accent-soft: #f7e9c6;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --text: #0f172a;
+        --muted: #52607a;
+        --border: rgba(15, 23, 42, 0.08);
+        --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.08);
+        --shadow-strong: 0 35px 80px rgba(22, 45, 90, 0.18);
+        --glass: rgba(255, 255, 255, 0.1);
+        --grid: rgba(19, 53, 92, 0.08);
+        --radius-xl: 28px;
+        --radius-lg: 22px;
+        --radius-md: 16px;
+        --radius-sm: 12px;
+        --container: min(1200px, calc(100% - 32px));
+      }
+
+      body.dark {
+        --bg: #071321;
+        --bg-2: #0d1d2a;
+        --panel: rgba(17, 24, 39, 0.7);
+        --panel-strong: rgba(15, 23, 42, 0.9);
+        --card: rgba(17, 24, 39, 0.82);
+        --card-2: rgba(16, 31, 46, 0.9);
+        --primary: #7cb2ff;
+        --primary-2: #4f93ff;
+        --secondary: #e5f0ff;
+        --secondary-soft: #d3e6ff;
+        --accent: #f6d78f;
+        --accent-soft: rgba(246, 215, 143, 0.14);
+        --success: #4ade80;
+        --warning: #fbbf24;
+        --danger: #f87171;
+        --text: #edf5ff;
+        --muted: #a3b5d2;
+        --border: rgba(148, 163, 184, 0.14);
+        --glass: rgba(17, 24, 39, 0.2);
+        --grid: rgba(148, 163, 184, 0.08);
+        --shadow-soft: 0 16px 40px rgba(2, 6, 23, 0.35);
+        --shadow-strong: 0 35px 80px rgba(1, 5, 20, 0.48);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(29, 78, 216, 0.12), transparent 30%),
+          radial-gradient(circle at bottom right, rgba(217, 182, 106, 0.12), transparent 30%),
+          linear-gradient(160deg, var(--bg), var(--bg-2));
+        color: var(--text);
+        line-height: 1.6;
+        transition: background 0.35s ease, color 0.35s ease;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+        background-size: 30px 30px;
+        mask-image: radial-gradient(circle at center, black, transparent 85%);
+        pointer-events: none;
+        opacity: 0.7;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
+
+      .container {
+        width: var(--container);
+        margin: 0 auto;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border: 0;
+        border-radius: 999px;
+        padding: 0.92rem 1.45rem;
+        font-size: 0.96rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn:focus-visible,
+      .nav-link:focus-visible,
+      .theme-toggle:focus-visible,
+      .menu-toggle:focus-visible,
+      .mobile-link:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 3px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        color: white;
+        box-shadow: 0 22px 38px rgba(29, 78, 216, 0.28);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--text);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        backdrop-filter: blur(10px);
+      }
+
+      body.dark .btn-secondary {
+        background: rgba(15, 23, 42, 0.35);
+        color: var(--text);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      .btn svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: padding 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .site-header.scrolled {
+        background: rgba(255, 255, 255, 0.68);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+      }
+
+      body.dark .site-header.scrolled {
+        background: rgba(7, 19, 33, 0.7);
+        box-shadow: 0 12px 28px rgba(2, 6, 23, 0.38);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      }
+
+      .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        min-height: 82px;
+        position: relative;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+
+      .site-header .brand { gap: 14px; }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        color: white;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 18px 30px rgba(29, 78, 216, 0.24);
+        font-size: 1.1rem;
+      }
+
+      .site-header .brand-mark { width: 46px; height: 46px; border-radius: 14px; }
+
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .brand-title {
+        font-size: 1.16rem;
+        line-height: 1.05;
+        letter-spacing: -0.045em;
+      }
+
+      .brand-sub {
+        font-size: 0.59rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .nav-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+      }
+
+      .nav-link {
+        padding: 0.72rem 0.95rem;
+        border-radius: 999px;
+        color: var(--muted);
+        font-weight: 600;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      }
+
+      .nav-link:hover {
+        background: rgba(29, 78, 216, 0.06);
+        color: var(--text);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        white-space: nowrap;
+      }
+
+      .theme-toggle,
+      .menu-toggle {
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.5);
+        color: var(--text);
+        display: grid;
+        place-items: center;
+        box-shadow: var(--shadow-soft);
+      }
+
+      body.dark .theme-toggle,
+      body.dark .menu-toggle {
+        background: rgba(15, 23, 42, 0.5);
+        border-color: rgba(148, 163, 184, 0.18);
+      }
+
+      .theme-toggle svg,
+      .menu-toggle svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .menu-toggle {
+        display: none;
+      }
+
+      .mobile-menu {
+        display: none;
+        border-top: 1px solid rgba(15, 23, 42, 0.06);
+        padding: 16px 0 8px;
+      }
+
+      .site-header .navbar { min-height: 76px; }
+      .site-header .brand-text { flex: 0 0 auto; }
+
+      body.dark .mobile-menu {
+        border-top-color: rgba(148, 163, 184, 0.12);
+      }
+
+      .mobile-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .mobile-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 0.8rem 0.9rem;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.42);
+        color: var(--text);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+      }
+
+      body.dark .mobile-link {
+        background: rgba(15, 23, 42, 0.4);
+        border-color: rgba(148, 163, 184, 0.12);
+      }
+
+      .hero {
+        position: relative;
+        padding: 52px 0 64px;
+      }
+
+      .hero::before,
+      .hero::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(22px);
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      .hero::before {
+        width: 500px;
+        height: 500px;
+        background: rgba(29, 78, 216, 0.16);
+        right: 8%;
+        top: 5%;
+      }
+
+      .hero::after {
+        width: 420px;
+        height: 420px;
+        background: rgba(217, 182, 106, 0.16);
+        left: 7%;
+        bottom: 5%;
+      }
+
+      .hero-inner {
+        display: grid;
+        grid-template-columns: 1.08fr 0.92fr;
+        align-items: center;
+        gap: 42px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 0.58rem 0.9rem;
+        border-radius: 999px;
+        color: var(--secondary-soft);
+        background: rgba(29, 78, 216, 0.08);
+        border: 1px solid rgba(29, 78, 216, 0.1);
+        font-weight: 700;
+        font-size: 0.73rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      body.dark .eyebrow {
+        color: var(--secondary-soft);
+        background: rgba(124, 178, 255, 0.08);
+        border-color: rgba(124, 178, 255, 0.18);
+      }
+
+      .eyebrow i {
+        width: 10px;
+        height: 10px;
+        display: inline-flex;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--success), #7bf1c1);
+      }
+
+      h1 {
+        margin: 1.25rem 0 1rem;
+        font-size: clamp(2.6rem, 5vw, 5rem);
+        line-height: 0.92;
+        letter-spacing: -0.06em;
+      }
+
+      .hero-copy p {
+        margin: 0;
+        max-width: 640px;
+        font-size: 1.08rem;
+        color: var(--muted);
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 28px;
+      }
+
+      .trust-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 26px;
+      }
+
+      .trust-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.75rem 0.9rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.55);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      body.dark .trust-pill {
+        background: rgba(15, 23, 42, 0.4);
+        border-color: rgba(148, 163, 184, 0.12);
+      }
+
+      .trust-pill svg {
+        width: 16px;
+        height: 16px;
+        color: var(--success);
+      }
+
+      .hero-visual {
+        position: relative;
+        perspective: 1500px;
+        min-height: 640px;
+      }
+
+      .campus-scene {
+        --scene-tilt-x: 0deg;
+        --scene-tilt-y: 0deg;
+        position: relative;
+        width: min(100%, 620px);
+        height: 520px;
+        margin: 0 auto;
+        transform-style: preserve-3d;
+        transform: rotateX(var(--scene-tilt-x)) rotateY(var(--scene-tilt-y));
+        transition: transform 0.25s ease;
+        animation: floatScene 7s ease-in-out infinite;
+        will-change: transform;
+      }
+
+      .scene-shadow {
+        position: absolute;
+        width: 76%;
+        height: 18%;
+        left: 12%;
+        bottom: 3%;
+        border-radius: 50%;
+        background: rgba(15, 23, 42, 0.18);
+        filter: blur(34px);
+        transform: translateZ(-60px);
+      }
+
+      .scene-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(20px);
+        opacity: 0.7;
+        animation: pulseGlow 6s ease-in-out infinite;
+      }
+
+      .scene-orb.one {
+        width: 180px;
+        height: 180px;
+        background: rgba(29, 78, 216, 0.25);
+        top: 4%;
+        right: 10%;
+      }
+
+      .scene-orb.two {
+        width: 210px;
+        height: 210px;
+        background: rgba(217, 182, 106, 0.2);
+        bottom: 12%;
+        left: 6%;
+        animation-delay: 1s;
+      }
+
+      .campus-card {
+        --rx: 0deg;
+        --ry: 0deg;
+        --tx: 0px;
+        --ty: 0px;
+        position: absolute;
+        width: 64%;
+        right: 18%;
+        top: 18%;
+        z-index: 2;
+        border-radius: 30px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 34px 70px rgba(15, 23, 42, 0.18);
+        backdrop-filter: blur(12px);
+        background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
+        transform: rotateX(var(--rx)) rotateY(var(--ry)) translate3d(var(--tx), var(--ty), -12px);
+        transition: transform 0.25s ease, box-shadow 0.3s ease;
+        will-change: transform;
+      }
+
+      .campus-card {
+        display: none;
+      }
+
+      .campus-card img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+      }
+
+      .campus-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(7,20,33,0.12), rgba(7,20,33,0.5));
+      }
+
+      .campus-label {
+        position: absolute;
+        left: 18px;
+        bottom: 16px;
+        right: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 14px;
+        color: white;
+      }
+
+      .campus-label strong {
+        display: block;
+        font-size: 1.4rem;
+        letter-spacing: -0.04em;
+      }
+
+      .campus-label span {
+        color: rgba(255,255,255,0.8);
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .floating-card {
+        --rx: 0deg;
+        --ry: 0deg;
+        --mx: 0px;
+        --my: 0px;
+        --float-y: 0px;
+        --card-scale: 1;
+        --card-rotate: 0deg;
+        position: absolute;
+        background: rgba(255,255,255,0.8);
+        border: 1px solid rgba(255,255,255,0.35);
+        box-shadow: 0 18px 30px rgba(15, 23, 42, 0.08);
+        min-height: 292px;
+        border-radius: 22px;
+        padding: 2rem 1.75rem;
+        backdrop-filter: blur(12px);
+        transform: rotateX(var(--rx)) rotateY(var(--ry)) rotate(var(--card-rotate)) translate3d(var(--mx), calc(var(--my) + var(--float-y)), var(--depth)) scale(var(--card-scale));
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, opacity 0.3s ease;
+        transform-style: preserve-3d;
+        will-change: transform;
+      }
+
+      .floating-card.is-card-active {
+        --card-scale: 1.12;
+        filter: saturate(1.12) brightness(1.04);
+        box-shadow: 0 30px 54px rgba(15, 23, 42, 0.2);
+        z-index: 8 !important;
+      }
+
+      .floating-card.is-card-back {
+        opacity: 0.22;
+        filter: saturate(0.55);
+        z-index: 2 !important;
+      }
+
+      .floating-card.is-card-hidden {
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+      }
+
+      body.dark .floating-card {
+        background: rgba(15, 23, 42, 0.7);
+        border-color: rgba(148, 163, 184, 0.12);
+      }
+
+      .floating-card.find {
+        left: 1%;
+        top: 22%;
+        width: 35%;
+        --depth: 34px;
+        --card-rotate: -3deg;
+        z-index: 12;
+        animation: floatFind 4.8s ease-in-out infinite;
+      }
+
+      .floating-card.report {
+        left: 32.5%;
+        top: 16%;
+        width: 35%;
+        --depth: 46px;
+        --card-rotate: 0deg;
+        z-index: 12;
+        animation: floatReport 5.6s ease-in-out -1.4s infinite;
+      }
+
+      .floating-card.location {
+        right: 1%;
+        top: 22%;
+        width: 35%;
+        --depth: 26px;
+        --card-rotate: 3deg;
+        z-index: 12;
+        animation: floatLocation 5.2s ease-in-out -2.3s infinite;
+      }
+
+      .floating-card.library {
+        left: 1%;
+        top: 22%;
+        width: 35%;
+        --depth: 22px;
+        --card-rotate: 3deg;
+        z-index: 12;
+        animation: floatLocation 5.8s ease-in-out -1.1s infinite;
+      }
+
+      .floating-card.book {
+        left: 32.5%;
+        top: 16%;
+        width: 35%;
+        --depth: 38px;
+        --card-rotate: -2deg;
+        z-index: 12;
+        animation: floatFind 5.1s ease-in-out -2.1s infinite;
+      }
+
+      .floating-card.keys {
+        right: 1%;
+        top: 22%;
+        width: 35%;
+        --depth: 18px;
+        --card-rotate: -3deg;
+        z-index: 12;
+        animation: floatReport 5.4s ease-in-out -3.1s infinite;
+      }
+
+      .floating-card .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 0.42rem 0.62rem;
+        border-radius: 999px;
+        background: rgba(16, 185, 129, 0.12);
+        color: var(--success);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .floating-card h4 {
+        margin: 1rem 0 0.35rem;
+        font-size: 1.4rem;
+        letter-spacing: -0.03em;
+      }
+
+      .floating-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.98rem;
+        line-height: 1.5;
+      }
+
+      .floating-card .mini-stat {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        color: var(--text);
+        font-size: 0.9rem;
+        margin-top: 1.2rem;
+      }
+
+      .mini-stat strong {
+        font-size: 1.65rem;
+      }
+
+      .recent-popover {
+        position: absolute;
+        left: 16%;
+        right: 16%;
+        bottom: 1%;
+        z-index: 15;
+        display: grid;
+        grid-template-columns: 64px 1fr auto;
+        align-items: center;
+        gap: 14px;
+        min-height: 92px;
+        padding: 0.8rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.56);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.78);
+        box-shadow: 0 24px 45px rgba(15, 23, 42, 0.16);
+        backdrop-filter: blur(18px);
+        transform: translate3d(var(--mx), var(--my), 72px) rotateX(5deg);
+        transition: transform 0.35s ease, opacity 0.28s ease;
+        animation: recentPopFloat 4.8s ease-in-out infinite;
+      }
+
+      body.dark .recent-popover {
+        background: rgba(15, 23, 42, 0.82);
+        border-color: rgba(148, 163, 184, 0.2);
+      }
+
+      .recent-popover {
+        left: 5%;
+        right: 5%;
+        bottom: -20%;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        min-height: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+        transform: translate3d(var(--mx), var(--my), 72px);
+        animation: none;
+      }
+
+      body.dark .recent-popover {
+        background: transparent;
+        border-color: transparent;
+      }
+
+      .recent-popover .recent-mini:nth-child(-n+3) {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        grid-template-rows: auto auto;
+        align-items: center;
+        column-gap: 9px;
+        padding: 0.55rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.78);
+        box-shadow: 0 18px 30px rgba(15, 23, 42, 0.14);
+        transform: rotateX(6deg) translateZ(var(--mini-depth, 22px));
+        animation: recentMiniFloat 4.8s ease-in-out infinite;
+      }
+
+      body.dark .recent-popover .recent-mini:nth-child(-n+3) {
+        background: rgba(15, 23, 42, 0.78);
+        border-color: rgba(148, 163, 184, 0.2);
+      }
+
+      .recent-popover .recent-mini:nth-child(2) { --mini-depth: 34px; animation-delay: -1.1s; }
+      .recent-popover .recent-mini:nth-child(3) { --mini-depth: 20px; animation-delay: -2.2s; }
+      .recent-popover .recent-mini:nth-child(4) { display: none; }
+      .recent-popover .recent-mini img { grid-row: 1 / span 2; width: 48px; height: 48px; }
+      .recent-popover .recent-mini-content { min-width: 0; }
+      .recent-popover .recent-mini small { margin: 0 0 0.1rem; font-size: 0.5rem; }
+      .recent-popover .recent-mini strong { overflow: hidden; font-size: 0.76rem; text-overflow: ellipsis; white-space: nowrap; }
+      .recent-popover .recent-mini p { overflow: hidden; margin-top: 0.12rem; font-size: 0.58rem; text-overflow: ellipsis; white-space: nowrap; }
+      .recent-popover .recent-mini-status { grid-column: 2; justify-self: start; margin-top: 0.25rem; padding: 0.22rem 0.38rem; font-size: 0.5rem; }
+
+      @keyframes recentMiniFloat {
+        0%, 100% { transform: rotateX(6deg) translateZ(var(--mini-depth, 22px)) translateY(0); }
+        50% { transform: rotateX(6deg) translateZ(var(--mini-depth, 22px)) translateY(-5px); }
+      }
+
+      .recent-mini {
+        display: none;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+
+      .recent-mini.is-visible {
+        display: grid;
+        grid-template-columns: 64px 1fr auto;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .recent-popover {
+        display: none !important;
+        left: 17%;
+        right: 17%;
+        bottom: -8%;
+        display: grid;
+        grid-template-columns: 1fr;
+        min-height: 98px;
+        padding: 0.8rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.56);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.78);
+        box-shadow: 0 24px 45px rgba(15, 23, 42, 0.16);
+        backdrop-filter: blur(18px);
+        transform: translate3d(var(--mx), var(--my), 72px) rotateX(5deg);
+        animation: recentPopFloat 4.8s ease-in-out infinite;
+      }
+
+      body.dark .recent-popover {
+        background: rgba(15, 23, 42, 0.82);
+        border-color: rgba(148, 163, 184, 0.2);
+      }
+
+      .recent-popover .recent-mini,
+      .recent-popover .recent-mini:nth-child(-n+3),
+      .recent-popover .recent-mini:nth-child(4) {
+        display: none !important;
+      }
+
+      .recent-popover .recent-mini.is-visible {
+        display: grid !important;
+        grid-template-columns: 64px 1fr auto;
+        grid-template-rows: none;
+        align-items: center;
+        gap: 14px;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        transform: none;
+        animation: none;
+      }
+
+      .recent-popover .recent-mini.is-visible img {
+        grid-row: auto;
+        width: 64px;
+        height: 64px;
+      }
+
+      .recent-popover .recent-mini.is-visible .recent-mini-status {
+        grid-column: auto;
+        justify-self: auto;
+        margin-top: 0;
+        padding: 0.45rem 0.62rem;
+        font-size: 0.64rem;
+      }
+
+      .recent-popover {
+        left: 17%;
+        right: 17%;
+        bottom: -44%;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        min-height: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+        transform: translate3d(var(--mx), var(--my), 72px);
+        animation: none;
+      }
+
+      body.dark .recent-popover {
+        background: transparent;
+        border-color: transparent;
+      }
+
+      .recent-popover .recent-mini:nth-child(-n+3) {
+        display: none !important;
+        grid-template-columns: 64px 1fr auto;
+        align-items: center;
+        gap: 14px;
+        min-height: 88px;
+        padding: 0.65rem 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.78);
+        box-shadow: 0 18px 30px rgba(15, 23, 42, 0.14);
+        transform: rotateX(5deg) translateZ(var(--mini-depth, 22px));
+        animation: none;
+      }
+
+      body.dark .recent-popover .recent-mini:nth-child(-n+3) {
+        background: rgba(15, 23, 42, 0.78);
+        border-color: rgba(148, 163, 184, 0.2);
+      }
+
+      .recent-popover .recent-mini:nth-child(1) { --mini-depth: 20px; }
+      .recent-popover .recent-mini:nth-child(2) { --mini-depth: 34px; animation-delay: -1.1s; }
+      .recent-popover .recent-mini:nth-child(3) { --mini-depth: 26px; animation-delay: -2.2s; }
+      .recent-popover .recent-mini:nth-child(4) { display: none !important; }
+      .recent-popover .recent-mini:nth-child(-n+3) img { grid-row: auto; width: 64px; height: 64px; }
+      .recent-popover .recent-mini:nth-child(-n+3) .recent-mini-content { min-width: 0; }
+      .recent-popover .recent-mini:nth-child(-n+3) small { margin: 0 0 0.18rem; font-size: 0.58rem; }
+      .recent-popover .recent-mini:nth-child(-n+3) strong { overflow: hidden; font-size: 0.92rem; text-overflow: ellipsis; white-space: nowrap; }
+      .recent-popover .recent-mini:nth-child(-n+3) p { overflow: hidden; margin-top: 0.15rem; font-size: 0.68rem; text-overflow: ellipsis; white-space: nowrap; }
+      .recent-popover .recent-mini:nth-child(-n+3) .recent-mini-status { grid-column: auto; margin-top: 0; padding: 0.4rem 0.55rem; font-size: 0.58rem; }
+
+      .recent-popover .recent-mini.is-visible {
+        display: grid !important;
+        grid-template-columns: 64px 1fr auto;
+        min-height: 88px;
+        padding: 0.65rem 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.78);
+        box-shadow: 0 18px 30px rgba(15, 23, 42, 0.14);
+        transform: rotateX(5deg) translateZ(28px);
+        animation: recentMiniFloat 4.8s ease-in-out infinite;
+      }
+
+      body.dark .recent-popover .recent-mini.is-visible {
+        background: rgba(15, 23, 42, 0.78);
+        border-color: rgba(148, 163, 184, 0.2);
+      }
+
+      body.dark .recent-mini {
+        background: rgba(15, 23, 42, 0.78);
+        border-color: rgba(148, 163, 184, 0.2);
+      }
+
+      .recent-mini img {
+        width: 64px;
+        height: 64px;
+        object-fit: cover;
+        border-radius: 12px;
+      }
+
+      .recent-mini small {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--primary);
+        font-size: 0.64rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .recent-mini strong {
+        display: block;
+        font-size: 1rem;
+        letter-spacing: -0.03em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .recent-mini p {
+        margin: 0.18rem 0 0;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .recent-mini-status {
+        padding: 0.45rem 0.62rem;
+        border-radius: 999px;
+        color: var(--success);
+        background: rgba(16, 185, 129, 0.12);
+        font-size: 0.64rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      @keyframes recentPopFloat {
+        0%, 100% { transform: translate3d(var(--mx), var(--my), 72px) rotateX(5deg) translateY(0); }
+        50% { transform: translate3d(var(--mx), var(--my), 72px) rotateX(5deg) translateY(-7px); }
+      }
+
+      .recent-section {
+        background: rgba(255, 255, 255, 0.34);
+      }
+
+      .recent-board {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .recent-column {
+        padding: 1.2rem;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.58);
+        box-shadow: var(--shadow-soft);
+      }
+
+      body.dark .recent-column {
+        background: rgba(15, 23, 42, 0.64);
+      }
+
+      .recent-column-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .recent-column-head h3 {
+        margin: 0;
+        font-size: 1.25rem;
+      }
+
+      .recent-count {
+        padding: 0.42rem 0.65rem;
+        border-radius: 999px;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.72);
+        font-size: 0.7rem;
+        font-weight: 800;
+      }
+
+      .recent-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .recent-item {
+        display: grid;
+        grid-template-columns: 58px 1fr auto;
+        align-items: center;
+        gap: 12px;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.72);
+        cursor: pointer;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      body.dark .recent-item {
+        background: rgba(15, 23, 42, 0.54);
+      }
+
+      .recent-item:hover {
+        transform: translateY(-6px) translateX(4px) rotateX(4deg) rotateY(-2deg) translateZ(12px);
+        box-shadow: 0 24px 42px rgba(32, 60, 118, 0.16);
+      }
+
+      .recent-item img {
+        width: 58px;
+        height: 58px;
+        object-fit: cover;
+        border-radius: 13px;
+      }
+
+      .recent-item h4 {
+        margin: 0 0 0.2rem;
+        font-size: 0.98rem;
+        letter-spacing: -0.03em;
+      }
+
+      .recent-item p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .recent-status {
+        padding: 0.38rem 0.54rem;
+        border-radius: 999px;
+        font-size: 0.64rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .recent-status.lost {
+        color: var(--danger);
+        background: rgba(239, 68, 68, 0.1);
+      }
+
+      .recent-status.found {
+        color: var(--success);
+        background: rgba(16, 185, 129, 0.11);
+      }
+
+      .recent-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 14px;
+      }
+
+      .recent-footer a {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--primary);
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
+
+      .lost-preview {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .lost-preview-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .lost-preview-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 250px;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: var(--shadow-soft);
+        transform-style: preserve-3d;
+        transition: transform .3s ease, box-shadow .3s ease;
+      }
+
+      body.dark .lost-preview-card { background: rgba(15, 23, 42, .7); }
+      .lost-preview-card:hover { transform: translateY(-9px) rotateX(5deg) rotateY(-3deg) translateZ(12px); box-shadow: var(--shadow-strong); }
+      .lost-preview-card img { width: 100%; height: 150px; object-fit: cover; transition: transform .35s ease; }
+      .lost-preview-card:hover img { transform: scale(1.06); }
+      .lost-preview-content { padding: 1rem 1.05rem 1.1rem; }
+      .lost-preview-content h3 { margin: 0 0 .3rem; font-size: 1.08rem; }
+      .lost-preview-content p { margin: 0; color: var(--muted); font-size: .78rem; }
+      .lost-preview-status { position: absolute; top: 12px; right: 12px; padding: .36rem .55rem; border-radius: 999px; color: #fff; background: var(--success); font-size: .62rem; font-weight: 800; text-transform: uppercase; }
+      .lost-preview-status.lost { background: var(--danger); }
+      .lost-preview-action { display: flex; justify-content: center; margin-top: 26px; }
+      @media (max-width: 820px) { .lost-preview-grid { grid-template-columns: 1fr; } }
+
+      .recent-detail-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 2200;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        background: rgba(8, 19, 33, 0.46);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .25s ease, visibility .25s ease;
+      }
+
+      .recent-detail-modal.open { opacity: 1; visibility: visible; }
+
+      .recent-detail-card {
+        width: min(100%, 520px);
+        padding: 24px;
+        border: 1px solid rgba(255,255,255,.4);
+        border-radius: 24px;
+        background: rgba(255,255,255,.9);
+        box-shadow: 0 35px 90px rgba(5,15,35,.3);
+        transform: perspective(900px) rotateX(8deg) translateY(25px) scale(.95);
+        transition: transform .3s ease;
+      }
+
+      body.dark .recent-detail-card { background: rgba(15,23,42,.92); border-color: rgba(148,163,184,.2); }
+      .recent-detail-modal.open .recent-detail-card { transform: perspective(900px) rotateX(0) translateY(0) scale(1); }
+      .recent-detail-top { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+      .recent-detail-top h2 { margin:0; font-size:1.55rem; }
+      .recent-detail-close { width:38px; height:38px; border:1px solid var(--border); border-radius:50%; background:rgba(255,255,255,.6); color:var(--text); }
+      .recent-detail-grid { display:grid; grid-template-columns:96px 1fr; gap:16px; align-items:center; margin-top:18px; }
+      .recent-detail-grid img { width:96px; height:96px; object-fit:cover; border-radius:18px; }
+      .recent-detail-grid p { margin:.35rem 0 0; color:var(--muted); font-size:.84rem; }
+      .recent-detail-info { display:grid; gap:8px; margin-top:20px; padding-top:16px; border-top:1px solid var(--border); color:var(--muted); font-size:.86rem; }
+      .recent-detail-info strong { color:var(--text); }
+
+      .search-shell {
+        --mx: 0px;
+        --my: 0px;
+        position: absolute;
+        left: 6%;
+        right: 10%;
+        bottom: -2%;
+        background: rgba(255, 255, 255, 0.83);
+        border: 1px solid rgba(255,255,255,0.44);
+        border-radius: 22px;
+        box-shadow: 0 18px 28px rgba(15, 23, 42, 0.12);
+        backdrop-filter: blur(16px);
+        padding: 1rem 1.1rem;
+        transform: translate3d(var(--mx), var(--my), 90px) rotateX(0deg);
+        transition: transform 0.28s ease;
+      }
+
+      body.dark .search-shell {
+        background: rgba(15, 23, 42, 0.75);
+        border-color: rgba(148, 163, 184, 0.16);
+      }
+
+      .search-shell form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .search-shell input {
+        flex: 1;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 14px;
+        background: rgba(255,255,255,0.7);
+        color: var(--text);
+        padding: 0.9rem 1rem;
+        font-size: 0.92rem;
+      }
+
+      body.dark .search-shell input {
+        background: rgba(17, 24, 39, 0.7);
+        border-color: rgba(148, 163, 184, 0.14);
+        color: var(--text);
+      }
+
+      .section {
+        padding: 112px 0;
+        position: relative;
+      }
+
+      .section-head {
+        max-width: 700px;
+        margin: 0 auto 42px;
+        text-align: center;
+      }
+
+      .kicker {
+        display: inline-block;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-weight: 800;
+        color: var(--primary);
+        margin-bottom: 0.9rem;
+      }
+
+      .section-head h2 {
+        margin: 0;
+        font-size: clamp(2.1rem, 4vw, 3.1rem);
+        letter-spacing: -0.06em;
+      }
+
+      .section-head p {
+        margin: 0.9rem auto 0;
+        color: var(--muted);
+        max-width: 620px;
+        font-size: 1.03rem;
+      }
+
+      .feature-grid,
+      .campus-grid,
+      .review-grid,
+      .stats-grid,
+      .footer-grid {
+        display: grid;
+        gap: 24px;
+      }
+
+      .feature-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .feature-card {
+        position: relative;
+        background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.58));
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-soft);
+        border-radius: var(--radius-xl);
+        padding: 1.7rem 1.3rem 1.5rem;
+        overflow: hidden;
+        transition: transform 0.35s ease, box-shadow 0.35s ease, border 0.35s ease;
+        perspective: 1200px;
+        transform-style: preserve-3d;
+        cursor: pointer;
+      }
+
+      .feature-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(135deg, rgba(29,78,216,0.04), rgba(217,182,106,0.04), transparent 65%);
+        pointer-events: none;
+      }
+
+      body.dark .feature-card {
+        background: linear-gradient(180deg, rgba(15,23,42,0.85), rgba(15,23,42,0.65));
+      }
+
+      .feature-card:hover {
+        transform: translateY(-8px) rotateX(7deg) rotateY(-6deg) translateZ(0);
+        box-shadow: var(--shadow-strong);
+        border-color: rgba(29, 78, 216, 0.16);
+      }
+
+      .feature-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, rgba(29, 78, 216, 0.1), rgba(29, 78, 216, 0.18));
+        color: var(--primary);
+        margin-bottom: 1rem;
+      }
+
+      .feature-card:nth-child(2) .feature-icon {
+        background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.2));
+        color: var(--success);
+      }
+
+      .feature-card:nth-child(3) .feature-icon {
+        background: linear-gradient(135deg, rgba(217,182,106,0.12), rgba(217,182,106,0.22));
+        color: #b38424;
+      }
+
+      .feature-card:nth-child(4) .feature-icon {
+        background: linear-gradient(135deg, rgba(14,165,233,0.12), rgba(59,130,246,0.22));
+        color: #0ea5e9;
+      }
+
+      .feature-card svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .feature-card h3 {
+        margin: 0 0 0.75rem;
+        font-size: 1.23rem;
+        letter-spacing: -0.04em;
+      }
+
+      .feature-card p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .how-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+        position: relative;
+      }
+
+      .how-rail {
+        position: absolute;
+        top: 58px;
+        left: 12%;
+        right: 12%;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(29,78,216,0.18), rgba(217,182,106,0.5), rgba(29,78,216,0.18));
+      }
+
+      .step-card {
+        position: relative;
+        z-index: 1;
+        background: rgba(255,255,255,0.7);
+        border: 1px solid var(--border);
+        border-radius: 26px;
+        padding: 2rem 1.5rem 1.5rem;
+        box-shadow: var(--shadow-soft);
+        text-align: center;
+        transform-style: preserve-3d;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .step-card::before {
+        content: "";
+        position: absolute;
+        inset: 12px 14px auto 14px;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(29,78,216,0.1), rgba(29,78,216,0.28), rgba(217,182,106,0.22));
+        border-radius: 999px;
+      }
+
+      body.dark .step-card {
+        background: rgba(15, 23, 42, 0.7);
+      }
+
+      .step-card:hover {
+        transform: translateY(-10px) rotateX(7deg) rotateY(-4deg) translateZ(12px);
+        box-shadow: var(--shadow-strong);
+      }
+
+      .step-number {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 1.1rem;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        color: white;
+        font-weight: 800;
+        box-shadow: 0 20px 28px rgba(29, 78, 216, 0.2);
+      }
+
+      .step-card h3 {
+        margin: 0 0 0.8rem;
+        letter-spacing: -0.04em;
+      }
+
+      .step-card p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .stat-card {
+        background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.62));
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 1.5rem 1rem;
+        text-align: center;
+        box-shadow: var(--shadow-soft);
+      }
+
+      body.dark .stat-card {
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.62));
+      }
+
+      .stat-card strong {
+        display: block;
+        font-size: clamp(1.7rem, 4vw, 2.5rem);
+        letter-spacing: -0.05em;
+        margin-bottom: 0.3rem;
+      }
+
+      .stat-card span {
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .reviews-wrap {
+        position: relative;
+      }
+
+      .review-card-shell {
+        position: relative;
+        perspective: 1200px;
+      }
+
+      .review-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .review-grid {
+        grid-template-columns: 1fr;
+        max-height: 560px;
+        overflow-y: auto;
+        padding: 4px 12px 8px 4px;
+        scroll-snap-type: y proximity;
+      }
+
+      .review-grid .review-card-shell {
+        scroll-snap-align: start;
+      }
+
+      .review-grid::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .review-grid::-webkit-scrollbar-thumb {
+        border-radius: 999px;
+        background: rgba(49, 88, 217, 0.3);
+      }
+
+      .review-grid {
+        display: flex;
+        gap: 18px;
+        max-height: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 4px 4px 14px;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+      }
+
+      .review-grid::-webkit-scrollbar { display: none; }
+
+      .review-grid {
+        position: relative;
+        display: block;
+        height: 300px;
+        overflow: hidden;
+      }
+
+      .review-grid .review-card-shell {
+        position: absolute;
+        inset: 4px 4px 14px;
+        width: calc(100% - 8px);
+        min-width: 0;
+        opacity: 0;
+        transform: translateX(105%);
+        transition: transform .6s ease, opacity .6s ease;
+      }
+
+      .review-grid .review-card-shell.is-review-active {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .review-grid .review-card-shell.is-review-before {
+        opacity: 0;
+        transform: translateX(-105%);
+      }
+
+      @media (max-width: 620px) {
+        .review-grid { height: 350px; }
+      }
+
+      .review-grid .review-card-shell {
+        flex: 0 0 100%;
+        min-width: 0;
+      }
+
+      .review-card {
+        position: relative;
+        background: rgba(255,255,255,0.72);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        box-shadow: var(--shadow-soft);
+        padding: 1.5rem 1.25rem 1.25rem;
+        transition: transform 0.32s ease, box-shadow 0.32s ease, border-color 0.32s ease;
+        transform-style: preserve-3d;
+        cursor: pointer;
+        will-change: transform;
+      }
+
+      .review-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(135deg, rgba(29,78,216,0.04), rgba(217,182,106,0.03), transparent 70%);
+        pointer-events: none;
+      }
+
+      body.dark .review-card {
+        background: rgba(15, 23, 42, 0.7);
+      }
+
+      .review-card:hover,
+      .review-card:focus-visible {
+        transform: translateY(-10px) rotateX(8deg) rotateY(-6deg) translateZ(18px);
+        box-shadow: var(--shadow-strong);
+        border-color: rgba(29, 78, 216, 0.18);
+      }
+
+      .review-card:active,
+      .review-card.is-active {
+        transform: translateY(-6px) scale(1.02) rotateX(10deg) rotateY(-8deg);
+      }
+
+      .review-card-shell::after {
+        content: "";
+        position: absolute;
+        inset: auto 12% -12px 12%;
+        height: 22px;
+        background: rgba(15, 23, 42, 0.08);
+        border-radius: 50%;
+        filter: blur(12px);
+        opacity: 0;
+        transition: opacity 0.25s ease;
+        pointer-events: none;
+      }
+
+      .review-card-shell:hover::after,
+      .review-card-shell:focus-within::after {
+        opacity: 1;
+      }
+
+      .review-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.42);
+        backdrop-filter: blur(10px);
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+        z-index: 2000;
+      }
+
+      .review-modal.open {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .review-modal-panel {
+        width: min(100%, 640px);
+        background: rgba(255,255,255,0.85);
+        border: 1px solid rgba(255,255,255,0.35);
+        border-radius: 28px;
+        box-shadow: 0 40px 100px rgba(15, 23, 42, 0.28);
+        transform: translateY(30px) scale(0.94) rotateX(10deg);
+        transition: transform 0.28s ease;
+        overflow: hidden;
+      }
+
+      body.dark .review-modal-panel {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(148, 163, 184, 0.18);
+      }
+
+      .review-modal.open .review-modal-panel {
+        transform: translateY(0) scale(1) rotateX(0deg);
+      }
+
+      .review-modal-inner {
+        padding: 1.4rem 1.4rem 1.2rem;
+      }
+
+      .review-modal-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 0.8rem;
+      }
+
+      .review-modal-close {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.6);
+        color: var(--text);
+        display: grid;
+        place-items: center;
+      }
+
+      body.dark .review-modal-close {
+        background: rgba(15, 23, 42, 0.6);
+      }
+
+      .review-modal-body {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .review-modal-body .avatar {
+        width: 82px;
+        height: 82px;
+      }
+
+      .review-modal-body strong {
+        display: block;
+        font-size: 1.5rem;
+        letter-spacing: -0.04em;
+      }
+
+      .review-modal-body span {
+        color: var(--muted);
+      }
+
+      .review-modal .stars {
+        margin: 0.9rem 0 0.8rem;
+      }
+
+      .review-modal .review-text {
+        font-size: 1.05rem;
+        line-height: 1.7;
+      }
+
+      .review-top {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 1rem;
+      }
+
+      .avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 14px 25px rgba(15, 23, 42, 0.18);
+      }
+
+      .review-person strong {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .review-person span {
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .stars {
+        display: inline-flex;
+        gap: 3px;
+        color: var(--accent);
+        margin: 0.9rem 0 0.8rem;
+      }
+
+      .stars svg {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+      }
+
+      .review-text {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .campus-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .campus-card-box {
+        position: relative;
+        border-radius: 28px;
+        overflow: hidden;
+        background: rgba(255,255,255,0.7);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-soft);
+        transform-style: preserve-3d;
+        transition: transform 0.32s ease, box-shadow 0.3s ease;
+        min-height: 500px;
+        perspective: 1200px;
+      }
+
+      .campus-card-box::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(29,78,216,0.08), rgba(217,182,106,0.04));
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      body.dark .campus-card-box {
+        background: rgba(15, 23, 42, 0.7);
+      }
+
+      .campus-card-box:hover {
+        transform: translateY(-10px) rotateX(7deg) rotateY(-4deg) translateZ(16px);
+        box-shadow: var(--shadow-strong);
+      }
+
+      .campus-card-box img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .campus-card-box:hover img {
+        transform: scale(1.07);
+      }
+
+      .campus-glass {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(8,12,18,0.1), rgba(8,12,18,0.62));
+      }
+
+      .campus-content {
+        position: absolute;
+        inset: auto 0 0 0;
+        padding: 1.4rem 1.3rem 1.5rem;
+        color: white;
+        z-index: 1;
+      }
+
+      .campus-content span {
+        display: inline-flex;
+        padding: 0.42rem 0.68rem;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.14);
+        border: 1px solid rgba(255,255,255,0.14);
+        backdrop-filter: blur(10px);
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .campus-content h3 {
+        margin: 0.8rem 0 0.35rem;
+        font-size: 1.7rem;
+        letter-spacing: -0.04em;
+      }
+
+      .campus-address {
+        margin: 0 0 1rem;
+        color: rgba(255,255,255,0.8);
+        font-size: 0.96rem;
+      }
+
+      .campus-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .campus-actions a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+      }
+
+      .cta-band {
+        background: linear-gradient(135deg, rgba(13,30,75,0.96), rgba(29,78,216,0.9));
+        border-radius: 32px;
+        padding: clamp(2rem, 4vw, 3rem);
+        color: white;
+        box-shadow: var(--shadow-strong);
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+      }
+
+      .cta-band:hover {
+        transform: rotateX(2deg) rotateY(-2deg);
+      }
+
+      .cta-band::before,
+      .cta-band::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(16px);
+      }
+
+      .cta-band::before {
+        width: 260px;
+        height: 260px;
+        background: rgba(255,255,255,0.12);
+        right: -30px;
+        top: -60px;
+      }
+
+      .cta-band::after {
+        width: 150px;
+        height: 150px;
+        background: rgba(217, 182, 106, 0.18);
+        left: -10px;
+        bottom: -30px;
+      }
+
+      .cta-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .cta-inner h2 {
+        margin: 0 0 0.35rem;
+        font-size: clamp(2rem, 4vw, 3rem);
+        letter-spacing: -0.06em;
+      }
+
+      .cta-inner p {
+        margin: 0;
+        color: rgba(255,255,255,0.78);
+        max-width: 620px;
+      }
+
+      .cta-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .cta-actions .btn-secondary {
+        background: rgba(255,255,255,0.12);
+        border-color: rgba(255,255,255,0.16);
+        color: white;
+      }
+
+      .site-footer {
+        padding: 52px 0 24px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        border-top: 1px solid rgba(15,23,42,0.08);
+        padding-top: 32px;
+      }
+
+      body.dark .footer-grid {
+        border-top-color: rgba(148,163,184,0.12);
+      }
+
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 1rem;
+      }
+
+      .footer-brand .brand-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .footer-copy {
+        max-width: 330px;
+        color: var(--muted);
+      }
+
+      .footer-col h4 {
+        margin: 0 0 0.9rem;
+        font-size: 0.96rem;
+        letter-spacing: -0.02em;
+      }
+
+      .footer-col ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.55rem;
+      }
+
+      .footer-col a,
+      .footer-col li {
+        color: var(--muted);
+      }
+
+      .footer-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding-top: 20px;
+        margin-top: 18px;
+        border-top: 1px solid rgba(15,23,42,0.08);
+        color: var(--muted);
+      }
+
+      body.dark .footer-bottom {
+        border-top-color: rgba(148,163,184,0.12);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px) scale(0.98);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      @keyframes floatScene {
+        0%,
+        100% {
+          transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+        }
+        50% {
+          transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+        }
+      }
+
+      @keyframes cardFloat {
+        0% {
+          transform: rotateX(12deg) rotateY(-18deg) translateZ(80px) translateY(0px);
+        }
+        100% {
+          transform: rotateX(10deg) rotateY(-12deg) translateZ(90px) translateY(-8px);
+        }
+      }
+
+      @keyframes pulseGlow {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.65;
+        }
+        50% {
+          transform: scale(1.08);
+          opacity: 1;
+        }
+      }
+
+      @keyframes floatFind {
+        0%, 100% { --float-y: 0px; }
+        50% { --float-y: -12px; }
+      }
+
+      @keyframes floatReport {
+        0%, 100% { --float-y: 0px; }
+        50% { --float-y: 14px; }
+      }
+
+      @keyframes floatLocation {
+        0%, 100% { --float-y: 0px; }
+        50% { --float-y: -9px; }
+      }
+
+      @media (max-width: 1024px) {
+        .hero-inner,
+        .feature-grid,
+        .campus-grid,
+        .review-grid,
+        .stats-grid,
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .hero-inner {
+          grid-template-columns: 1fr;
+        }
+
+        .cta-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (max-width: 820px) {
+        .nav-group {
+          display: none;
+        }
+
+        .menu-toggle {
+          display: grid;
+        }
+
+        .nav-actions .btn-primary,
+        .nav-actions .btn-secondary {
+          display: none;
+        }
+
+        .feature-grid,
+        .campus-grid,
+        .review-grid,
+        .stats-grid,
+        .footer-grid,
+        .how-grid,
+        .recent-board {
+          grid-template-columns: 1fr;
+        }
+
+        .section {
+          padding: 86px 0;
+        }
+
+        .how-rail {
+          display: none;
+        }
+
+        .campus-scene {
+          height: 600px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .hero {
+          padding-top: 30px;
+        }
+
+        .hero-copy p {
+          font-size: 1rem;
+        }
+
+        .hero-actions,
+        .cta-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .search-shell {
+          left: 20px;
+          right: 20px;
+          bottom: 12px;
+        }
+
+        .search-shell form {
+          flex-direction: column;
+        }
+
+        .floating-card.find,
+        .floating-card.report,
+        .floating-card.location,
+        .floating-card.library,
+        .floating-card.book,
+        .floating-card.keys {
+          transform: none;
+          width: 34%;
+          animation: none;
+        }
+
+        .floating-card {
+          min-height: 220px;
+          padding: 1.1rem 0.95rem;
+        }
+
+        .recent-popover {
+          left: 2%;
+          right: 2%;
+          bottom: -4%;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 5px;
+        }
+
+        .recent-popover .recent-mini:nth-child(-n+3) {
+          grid-template-columns: 38px 1fr;
+          padding: 0.35rem;
+          column-gap: 5px;
+        }
+
+        .recent-popover .recent-mini img {
+          width: 38px;
+          height: 38px;
+        }
+
+        .recent-popover {
+          left: 5%;
+          right: 5%;
+          bottom: -18%;
+          grid-template-columns: 1fr;
+          gap: 6px;
+          padding: 0;
+        }
+
+        .recent-popover .recent-mini:nth-child(-n+3) {
+          grid-template-columns: 50px 1fr auto;
+          gap: 9px;
+          min-height: 70px;
+          padding: 0.45rem 0.55rem;
+        }
+
+        .recent-popover .recent-mini:nth-child(-n+3) img {
+          width: 50px;
+          height: 50px;
+        }
+
+        .recent-popover .recent-mini.is-visible {
+          grid-template-columns: 50px 1fr auto;
+          min-height: 70px;
+          padding: 0.45rem 0.55rem;
+        }
+
+        .floating-card h4 {
+          font-size: 0.98rem;
+        }
+
+        .floating-card p {
+          font-size: 0.72rem;
+        }
+
+        .recent-column {
+          padding: 0.9rem;
+        }
+
+        .floating-card.find {
+          left: 0;
+          top: 7%;
+        }
+
+        .floating-card.report {
+          left: 35.5%;
+          top: 4%;
+        }
+
+        .floating-card.location {
+          right: 0;
+          top: 22%;
+        }
+
+        .floating-card.library {
+          left: 1%;
+          top: 22%;
+        }
+
+        .floating-card.book {
+          left: 33%;
+          top: 16%;
+        }
+
+        .floating-card.keys {
+          right: 1%;
+          top: 22%;
+        }
+
+        .campus-card {
+          width: 82%;
+          right: 8%;
+          top: 14%;
+        }
+
+        .footer-bottom {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+          scroll-behavior: auto !important;
+        }
+
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    
+      /* Community comment box */
+      .comment-box{margin-top:24px;padding:24px;border:1px solid var(--border);border-radius:26px;background:rgba(255,255,255,.68);box-shadow:var(--shadow-soft);backdrop-filter:blur(16px)}
+      body.dark .comment-box{background:rgba(15,23,42,.72)}
+      .comment-box-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.comment-box-head h3{margin:.3rem 0 .35rem;font-size:1.35rem}.comment-box-head p{margin:0;color:var(--muted);max-width:680px}.comment-box-head>svg{width:34px;height:34px;color:var(--primary);flex:0 0 auto}
+      .comment-form{display:grid;gap:12px;margin-top:18px}.comment-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.comment-form input,.comment-form textarea{width:100%;border:1px solid var(--border);border-radius:14px;padding:13px 14px;background:rgba(255,255,255,.72);color:var(--text);outline:0}.comment-form textarea{min-height:100px;resize:vertical}.comment-form input:focus,.comment-form textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(29,78,216,.1)}body.dark .comment-form input,body.dark .comment-form textarea{background:rgba(15,23,42,.8)}.comment-form-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px}.comment-form-bottom span{font-size:.78rem;color:var(--muted)}.community-comments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}.community-comment{padding:15px;border-radius:17px;background:rgba(255,255,255,.55);border:1px solid var(--border);animation:commentIn .45s ease both}.community-comment strong{display:block}.community-comment small{display:block;color:var(--muted);margin:2px 0 7px}.community-comment p{margin:0;color:var(--muted);font-size:.9rem}.community-comment .comment-avatar{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;float:left;margin-right:10px;background:linear-gradient(135deg,var(--primary),#7c3aed);color:#fff;font-weight:900}.community-comment:after{content:"";display:block;clear:both}@keyframes commentIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+      @media(max-width:700px){.comment-fields,.community-comments{grid-template-columns:1fr}.comment-box-head{flex-direction:column}.comment-form-bottom{align-items:stretch;flex-direction:column}.comment-form-bottom .btn{width:100%}}
+      .comment-fields{grid-template-columns:1fr;gap:10px}
+</style>
+  <link rel="stylesheet" href="app.css" />
+<script defer src="app.js"></script>
+</head>
+  <body class="home-page">
+    <header class="site-header" id="siteHeader">
+      <div class="container navbar">
+        <a href="index.html" class="brand" aria-label="CampusFind home">
+          <span class="brand-mark" aria-hidden="true"><i data-lucide="search"></i></span>
+          <span class="brand-text">
+            <span class="brand-title">CampusFind</span>
+            <span class="brand-sub">Premier University</span>
+          </span>
+        </a>
+
+        <nav class="nav-group" aria-label="Main navigation">
+          <a class="nav-link" href="#home">Home</a>
+          <a class="nav-link" href="#how-it-works">How It Works</a>
+          <a class="nav-link" href="#campuses">Campuses</a>
+          <a class="nav-link" href="#lost-found">Lost &amp; Found</a>
+          <a class="nav-link" href="#reviews">Reviews</a>
+        </nav>
+
+        <div class="nav-actions">
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+            <i data-lucide="sun-medium"></i>
+          </button>
+          <a class="btn btn-secondary" href="login.html">Sign In</a>
+          <a class="btn btn-primary" href="signup.html">Sign Up</a>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+
+      <div class="container mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+        <nav class="mobile-nav">
+          <a class="mobile-link" href="#home">Home <i data-lucide="arrow-right"></i></a>
+          <a class="mobile-link" href="#how-it-works">How It Works <i data-lucide="arrow-right"></i></a>
+          <a class="mobile-link" href="#campuses">Campuses <i data-lucide="arrow-right"></i></a>
+          <a class="mobile-link" href="#lost-found">Lost &amp; Found <i data-lucide="arrow-right"></i></a>
+          <a class="mobile-link" href="#reviews">Reviews <i data-lucide="arrow-right"></i></a>
+          <a class="mobile-link" href="login.html">Sign In <i data-lucide="arrow-right"></i></a>
+          <a class="mobile-link" href="signup.html">Sign Up <i data-lucide="arrow-right"></i></a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="container hero-inner">
+          <div class="hero-copy reveal">
+            <span class="eyebrow"><i></i> CampusFind</span>
+            <h1>Lost Something on Campus?<br />Let CampusFind Help You Find It.</h1>
+            <p>
+              A trusted lost &amp; found network built for Premier University students.
+              Report lost items, search recovered belongings, and reconnect with your campus community instantly.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="lost-found.html">
+                <i data-lucide="search"></i>
+                Browse Lost &amp; Found
+              </a>
+              <a class="btn btn-secondary" href="#campuses">
+                <i data-lucide="map-pin"></i>
+                Explore Campus
+              </a>
+            </div>
+
+            <div class="trust-row" aria-label="Trust indicators">
+              <span class="trust-pill"><i data-lucide="shield-check"></i> Trusted by students</span>
+              <span class="trust-pill"><i data-lucide="flashlight"></i> Fast item recovery</span>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal" aria-label="Campus hero illustration">
+            <div class="campus-scene">
+              <div class="scene-shadow"></div>
+              <div class="scene-orb one"></div>
+              <div class="scene-orb two"></div>
+
+              <div class="floating-card find">
+                <span class="badge"><i data-lucide="search"></i> Find</span>
+                <h4>Lost Wallet</h4>
+                <p>Reported near GEC campus</p>
+                <div class="mini-stat">
+                  <span>Today</span>
+                  <strong>02</strong>
+                </div>
+              </div>
+
+              <div class="floating-card report">
+                <span class="badge"><i data-lucide="package-check"></i> Found</span>
+                <h4>ID Card</h4>
+                <p>Recovered by library desk</p>
+                <div class="mini-stat">
+                  <span>Claims</span>
+                  <strong>09</strong>
+                </div>
+              </div>
+
+              <div class="floating-card location">
+                <span class="badge"><i data-lucide="map-pin"></i> Campus</span>
+                <h4>Premier University</h4>
+                <p>GEC · Hazari Line · WASA</p>
+              </div>
+
+              <div class="floating-card library">
+                <span class="badge"><i data-lucide="library"></i> Desk</span>
+                <h4>Earbuds</h4>
+                <p>Found near the library desk</p>
+                <div class="mini-stat">
+                  <span>New</span>
+                  <strong>04</strong>
+                </div>
+              </div>
+
+              <div class="floating-card book">
+                <span class="badge"><i data-lucide="book-open"></i> Books</span>
+                <h4>Notebook</h4>
+                <p>Lost around Hazari Line campus</p>
+                <div class="mini-stat">
+                  <span>Matches</span>
+                  <strong>07</strong>
+                </div>
+              </div>
+
+              <div class="floating-card keys">
+                <span class="badge"><i data-lucide="key-round"></i> Found</span>
+                <h4>Keys</h4>
+                <p>Handed in at the WASA office</p>
+                <div class="mini-stat">
+                  <span>Today</span>
+                  <strong>03</strong>
+                </div>
+              </div>
+
+              <div class="recent-popover" id="recentPopover" aria-live="polite">
+                <article class="recent-mini">
+                  <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=240&q=80" alt="Black wallet" />
+                  <div class="recent-mini-content">
+                    <small>Recently found</small>
+                    <strong>Black Wallet</strong>
+                    <p>GEC Campus · 1 hour ago</p>
+                  </div>
+                  <span class="recent-mini-status">Found</span>
+                </article>
+                <article class="recent-mini">
+                  <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=240&q=80" alt="Student ID card" />
+                  <div class="recent-mini-content">
+                    <small>Recently lost</small>
+                    <strong>Student ID Card</strong>
+                    <p>GEC Campus · 2 hours ago</p>
+                  </div>
+                  <span class="recent-mini-status" style="color: var(--danger); background: rgba(239, 68, 68, 0.1);">Lost</span>
+                </article>
+                <article class="recent-mini">
+                  <img src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&w=240&q=80" alt="Blue notebook" />
+                  <div class="recent-mini-content">
+                    <small>Recently found</small>
+                    <strong>Blue Notebook</strong>
+                    <p>Hazari Line · Today</p>
+                  </div>
+                  <span class="recent-mini-status">Found</span>
+                </article>
+                <article class="recent-mini">
+                  <img src="https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=240&q=80" alt="Room keys" />
+                  <div class="recent-mini-content">
+                    <small>Recently lost</small>
+                    <strong>Room Keys</strong>
+                    <p>Hazari Line · Yesterday</p>
+                  </div>
+                  <span class="recent-mini-status" style="color: var(--danger); background: rgba(239, 68, 68, 0.1);">Lost</span>
+                </article>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="features">
+        <div class="container">
+          <div class="section-head">
+            <span class="kicker">Features</span>
+            <h2>Modern tools for every campus problem</h2>
+            <p>
+              CampusFind makes reporting, searching, and recovering items simple, secure, and built around the real needs of university life.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature-card reveal">
+              <div class="feature-icon"><i data-lucide="search"></i></div>
+              <h3>Search Easily</h3>
+              <p>Search campus-specific lost items with quick filters using keywords, category, location, or timeframe.</p>
+            </article>
+
+            <article class="feature-card reveal">
+              <div class="feature-icon"><i data-lucide="map-pin"></i></div>
+              <h3>Campus Based</h3>
+              <p>Keep the experience precise and relevant with GEC, Hazari Line, and WASA campus-focused discovery.</p>
+            </article>
+
+            <article class="feature-card reveal">
+              <div class="feature-icon"><i data-lucide="clipboard-pen-line"></i></div>
+              <h3>Report Quickly</h3>
+              <p>Submit lost or found reports in minutes with clear validation, image previews, and secure reporting flow.</p>
+            </article>
+
+            <article class="feature-card reveal">
+              <div class="feature-icon"><i data-lucide="users"></i></div>
+              <h3>Help Others</h3>
+              <p>Reconnect people with their belongings while building a more trustworthy and active campus community.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="how-it-works">
+        <div class="container">
+          <div class="section-head">
+            <span class="kicker">How it works</span>
+            <h2>From search to recovery in three steps</h2>
+            <p>Simple and student-friendly—from reporting an item to finding the right person for pickup.</p>
+          </div>
+
+          <div class="how-grid">
+            <div class="how-rail" aria-hidden="true"></div>
+
+            <article class="step-card reveal">
+              <div class="step-number">01</div>
+              <h3>Search</h3>
+              <p>Browse by name, category, campus, or the last known location using a clean and focused search flow.</p>
+            </article>
+
+            <article class="step-card reveal">
+              <div class="step-number">02</div>
+              <h3>Report</h3>
+              <p>Lost or found a thing? Submit a detailed report with item description, image, and contact details.</p>
+            </article>
+
+            <article class="step-card reveal">
+              <div class="step-number">03</div>
+              <h3>Connect</h3>
+              <p>Review the report, contact the reporter safely, and complete the return with full confidence.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" aria-label="Demo statistics">
+        <div class="container">
+          <div class="stats-grid">
+            <div class="stat-card reveal">
+              <strong data-counter="500">0</strong>
+              <span>Items Reported</span>
+            </div>
+            <div class="stat-card reveal">
+              <strong data-counter="300">0</strong>
+              <span>Items Recovered</span>
+            </div>
+            <div class="stat-card reveal">
+              <strong data-counter="3">0</strong>
+              <span>Campuses</span>
+            </div>
+            <div class="stat-card reveal">
+              <strong data-counter="1000">0</strong>
+              <span>Students</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section recent-section reveal" id="recent-items">
+        <div class="container">
+          <div class="section-head">
+            <span class="kicker">Live activity</span>
+            <h2>Recently lost and found</h2>
+            <p>See what students have recently reported across GEC, Hazari Line, and WASA campuses.</p>
+          </div>
+
+          <div class="recent-board">
+            <article class="recent-column reveal">
+              <div class="recent-column-head">
+                <h3>Recently Lost</h3>
+                <span class="recent-count">3 reports</span>
+              </div>
+              <div class="recent-list">
+                <div class="recent-item">
+                  <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=240&q=80" alt="Student ID card" loading="lazy" />
+                  <div>
+                    <h4>Student ID Card</h4>
+                    <p>GEC Campus · 2 hours ago</p>
+                  </div>
+                  <span class="recent-status lost">Lost</span>
+                </div>
+                <div class="recent-item">
+                  <img src="https://images.unsplash.com/photo-1587145820266-a5951ee6f620?auto=format&fit=crop&w=240&q=80" alt="Scientific calculator" loading="lazy" />
+                  <div>
+                    <h4>Scientific Calculator</h4>
+                    <p>WASA Campus · 5 hours ago</p>
+                  </div>
+                  <span class="recent-status lost">Lost</span>
+                </div>
+                <div class="recent-item">
+                  <img src="https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=240&q=80" alt="Room keys" loading="lazy" />
+                  <div>
+                    <h4>Room Keys</h4>
+                    <p>Hazari Line Campus · Yesterday</p>
+                  </div>
+                  <span class="recent-status lost">Lost</span>
+                </div>
+              </div>
+              <div class="recent-footer"><a href="lost-found.html">View all lost items <i data-lucide="arrow-right"></i></a></div>
+            </article>
+
+            <article class="recent-column reveal">
+              <div class="recent-column-head">
+                <h3>Recently Found</h3>
+                <span class="recent-count">3 reports</span>
+              </div>
+              <div class="recent-list">
+                <div class="recent-item">
+                  <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=240&q=80" alt="Black wallet" loading="lazy" />
+                  <div>
+                    <h4>Black Wallet</h4>
+                    <p>GEC Campus · 1 hour ago</p>
+                  </div>
+                  <span class="recent-status found">Found</span>
+                </div>
+                <div class="recent-item">
+                  <img src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&w=240&q=80" alt="Blue notebook" loading="lazy" />
+                  <div>
+                    <h4>Blue Notebook</h4>
+                    <p>Hazari Line Campus · Today</p>
+                  </div>
+                  <span class="recent-status found">Found</span>
+                </div>
+                <div class="recent-item">
+                  <img src="https://images.unsplash.com/photo-1625842268584-8f3296236761?auto=format&fit=crop&w=240&q=80" alt="USB drive" loading="lazy" />
+                  <div>
+                    <h4>USB Drive</h4>
+                    <p>GEC Campus · Yesterday</p>
+                  </div>
+                  <span class="recent-status found">Found</span>
+                </div>
+              </div>
+              <div class="recent-footer"><a href="lost-found.html">View all found items <i data-lucide="arrow-right"></i></a></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section lost-preview reveal" id="lost-found-preview">
+        <div class="container">
+          <div class="section-head">
+            <span class="kicker">Lost &amp; Found board</span>
+            <h2>See the latest campus reports</h2>
+            <p>Open the full board to search every lost and found report across GEC, Hazari Line, and WASA.</p>
+          </div>
+          <div class="lost-preview-grid">
+            <article class="lost-preview-card reveal">
+              <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=800&q=85" alt="Black wallet" loading="lazy" />
+              <span class="lost-preview-status">Found</span>
+              <div class="lost-preview-content"><h3>Black Wallet</h3><p>GEC Campus · Main gate · 1 hour ago</p></div>
+            </article>
+            <article class="lost-preview-card reveal">
+              <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=85" alt="Student ID card" loading="lazy" />
+              <span class="lost-preview-status lost">Lost</span>
+              <div class="lost-preview-content"><h3>Student ID Card</h3><p>GEC Campus · Academic building · 2 hours ago</p></div>
+            </article>
+            <article class="lost-preview-card reveal">
+              <img src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&w=800&q=85" alt="Blue notebook" loading="lazy" />
+              <span class="lost-preview-status">Found</span>
+              <div class="lost-preview-content"><h3>Blue Notebook</h3><p>Hazari Line Campus · Library · Today</p></div>
+            </article>
+          </div>
+          <div class="lost-preview-action"><a class="btn btn-primary" href="lost-found.html"><i data-lucide="arrow-up-right"></i> Open Lost &amp; Found</a></div>
+        </div>
+      </section>
+
+      <div class="recent-detail-modal" id="recentDetailModal" aria-hidden="true">
+        <article class="recent-detail-card" role="dialog" aria-modal="true" aria-labelledby="recentDetailTitle">
+          <div class="recent-detail-top">
+            <h2 id="recentDetailTitle">Item details</h2>
+            <button class="recent-detail-close" id="recentDetailClose" type="button" aria-label="Close item details"><i data-lucide="x"></i></button>
+          </div>
+          <div class="recent-detail-grid">
+            <img id="recentDetailImage" src="" alt="" />
+            <div><strong id="recentDetailStatus">Found</strong><p id="recentDetailDescription"></p></div>
+          </div>
+          <div class="recent-detail-info">
+            <div><strong>Campus:</strong> <span id="recentDetailCampus"></span></div>
+            <div><strong>Location:</strong> <span id="recentDetailLocation"></span></div>
+            <div><strong>Posted by:</strong> <span id="recentDetailReporter"></span></div>
+            <div><strong>Gmail:</strong> <span id="recentDetailEmail"></span></div>
+          </div>
+        </article>
+      </div>
+
+      <section class="section reveal" id="reviews">
+        <div class="container">
+          <div class="section-head">
+            <span class="kicker">Student reviews</span>
+            <h2>Trusted by the campus community</h2>
+            <p>Sample reviews demonstrate the type of student experience CampusFind is designed to create.</p>
+          </div>
+
+          <div class="review-grid">
+            <div class="review-card-shell reveal">
+              <article class="review-card" tabindex="0" data-name="Arif Rahman" data-role="CSE Student" data-text="I found my lost student ID within hours after posting it. The system was simple, quick, and honestly made the whole experience less stressful." data-image="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80">
+                <div class="review-top">
+                  <img class="avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80" alt="Arif Rahman" loading="lazy" />
+                  <div class="review-person">
+                    <strong>Arif Rahman</strong>
+                    <span>CSE Student</span>
+                  </div>
+                </div>
+
+                <div class="stars" aria-label="5 star review">
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                </div>
+
+                <p class="review-text">
+                  “I found my lost student ID within hours after posting it. The system was simple, quick, and honestly made the whole experience less stressful.”
+                </p>
+              </article>
+            </div>
+
+            <div class="review-card-shell reveal">
+              <article class="review-card" tabindex="0" data-name="Nusrat Sultana" data-role="BBA Student" data-text="The campus-based filters and easy upload process made it easy to locate my bag. It feels like a real community platform built for university life." data-image="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80">
+                <div class="review-top">
+                  <img class="avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80" alt="Nusrat Sultana" loading="lazy" />
+                  <div class="review-person">
+                    <strong>Nusrat Sultana</strong>
+                    <span>BBA Student</span>
+                  </div>
+                </div>
+
+                <div class="stars" aria-label="5 star review">
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                </div>
+
+                <p class="review-text">
+                  “The campus-based filters and easy upload process made it easy to locate my bag. It feels like a real community platform built for university life.”
+                </p>
+              </article>
+            </div>
+
+            <div class="review-card-shell reveal">
+              <article class="review-card" tabindex="0" data-name="Tanvir Mahmud" data-role="EEE Student" data-text="Very practical and trustworthy. I could quickly report a found item and help someone return their notebook without any confusion." data-image="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80">
+                <div class="review-top">
+                  <img class="avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80" alt="Tanvir Mahmud" loading="lazy" />
+                  <div class="review-person">
+                    <strong>Tanvir Mahmud</strong>
+                    <span>EEE Student</span>
+                  </div>
+                </div>
+
+                <div class="stars" aria-label="5 star review">
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                  <i data-lucide="star" fill="currentColor"></i>
+                </div>
+
+                <p class="review-text">
+                  “Very practical and trustworthy. I could quickly report a found item and help someone return their notebook without any confusion.”
+                </p>
+              </article>
+            </div>
+
+            <div class="review-card-shell reveal"><article class="review-card" tabindex="0" data-name="Sadia Karim" data-role="Architecture Student" data-text="The clear campus labels helped me recover my sketchbook before my next studio class. The flow feels calm and easy to trust." data-image="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"><div class="review-top"><img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="Sadia Karim" loading="lazy" /><div class="review-person"><strong>Sadia Karim</strong><span>Architecture Student</span></div></div><div class="stars" aria-label="5 star review"><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i></div><p class="review-text">“The clear campus labels helped me recover my sketchbook before my next studio class. The flow feels calm and easy to trust.”</p></article></div>
+            <div class="review-card-shell reveal"><article class="review-card" tabindex="0" data-name="Mahin Chowdhury" data-role="CSE Student" data-text="I posted a found charger and the owner contacted me the same afternoon. The report details made the handover simple." data-image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80"><div class="review-top"><img class="avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" alt="Mahin Chowdhury" loading="lazy" /><div class="review-person"><strong>Mahin Chowdhury</strong><span>CSE Student</span></div></div><div class="stars" aria-label="5 star review"><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i></div><p class="review-text">“I posted a found charger and the owner contacted me the same afternoon. The report details made the handover simple.”</p></article></div>
+            <div class="review-card-shell reveal"><article class="review-card" tabindex="0" data-name="Rafi Ahmed" data-role="BBA Student" data-text="The filters are exactly what a busy student needs. I found the right campus and item type without scrolling through unrelated posts." data-image="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80"><div class="review-top"><img class="avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80" alt="Rafi Ahmed" loading="lazy" /><div class="review-person"><strong>Rafi Ahmed</strong><span>BBA Student</span></div></div><div class="stars" aria-label="5 star review"><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i></div><p class="review-text">“The filters are exactly what a busy student needs. I found the right campus and item type without scrolling through unrelated posts.”</p></article></div>
+            <div class="review-card-shell reveal"><article class="review-card" tabindex="0" data-name="Farhan Kabir" data-role="EEE Student" data-text="CampusFind turns an awkward lost-item situation into a clear community workflow. I always know what to do next." data-image="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80"><div class="review-top"><img class="avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80" alt="Farhan Kabir" loading="lazy" /><div class="review-person"><strong>Farhan Kabir</strong><span>EEE Student</span></div></div><div class="stars" aria-label="5 star review"><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i></div><p class="review-text">“CampusFind turns an awkward lost-item situation into a clear community workflow. I always know what to do next.”</p></article></div>
+      
+          </div>
+
+          <div class="comment-box" id="commentBox">
+            <div class="comment-box-head">
+              <div><span class="kicker">Community voice</span><h3>Share your CampusFind experience</h3><p>Post a campus thought, feedback, or experience. It animates into the feed, saves locally, and syncs to MongoDB Atlas when connected.</p></div>
+              <i data-lucide="message-circle-more"></i>
+            </div>
+            <form id="commentForm" class="comment-form">
+              <div class="comment-fields"><input id="commentName" required maxlength="50" placeholder="Your name"><input id="commentRole" maxlength="50" placeholder="CSE Student / BBA Student"></div>
+              <textarea id="commentText" required maxlength="280" placeholder="Write a short comment about your CampusFind experience..."></textarea>
+              <input id="commentImage" type="file" accept="image/*" aria-label="Community image">
+              <div class="comment-form-bottom"><span id="commentStatus">0 / 280</span><button class="btn btn-primary" type="submit"><i data-lucide="send"></i> Post comment</button></div>
+            </form>
+            <div id="communityComments" class="community-comments"></div>
+          </div>
+    </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="campuses">
+        <div class="container">
+          <div class="section-head">
+            <span class="kicker">Campuses</span>
+            <h2>Three Premier University campuses, one connected community</h2>
+            <p>CampusFind brings all three campus communities together through a shared lost &amp; found experience built for students.</p>
+          </div>
+
+          <div class="campus-grid">
+            <article class="campus-card-box reveal">
+              <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1200&q=80" alt="GEC Campus" loading="lazy" />
+              <div class="campus-glass"></div>
+              <div class="campus-content">
+                <span>GEC Campus</span>
+                <h3>GEC Campus</h3>
+                <p class="campus-address">541, O.R. Nizam Road, GEC Circle, Chittagong</p>
+                <div class="campus-actions">
+                  <a href="campus-gec.html" aria-label="Explore GEC Campus">Explore <i data-lucide="arrow-right"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <article class="campus-card-box reveal">
+              <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80" alt="Hazari Line Campus" loading="lazy" />
+              <div class="campus-glass"></div>
+              <div class="campus-content">
+                <span>Hazari Line Campus</span>
+                <h3>Hazari Line Campus</h3>
+                <p class="campus-address">Hazari Line, Chattogram</p>
+                <div class="campus-actions">
+                  <a href="campus-hazari-line.html" aria-label="Explore Hazari Line Campus">Explore <i data-lucide="arrow-right"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <article class="campus-card-box reveal">
+              <img src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1200&q=85" alt="WASA Campus university building" loading="lazy" />
+              <div class="campus-glass"></div>
+              <div class="campus-content">
+                <span>WASA Campus</span>
+                <h3>WASA Campus</h3>
+                <p class="campus-address">Academic Building-3, WASA Circle, Dampara, Chittagong</p>
+                <div class="campus-actions">
+                  <a href="campus-wasa.html" aria-label="Explore WASA Campus">Explore <i data-lucide="arrow-right"></i></a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="lost-found">
+        <div class="container">
+          <div class="cta-band">
+            <div class="cta-inner">
+              <div>
+                <span class="kicker" style="color: rgba(255,255,255,0.9);">Community</span>
+                <h2>Lost something? Found something?<br />Help your campus community.</h2>
+                <p>Report a lost item, offer a found item, and help students reconnect with what matters most.</p>
+              </div>
+
+              <div class="cta-actions">
+                <a class="btn btn-primary" href="report.html?status=lost">
+                  <i data-lucide="alert-circle"></i>
+                  Report Lost Item
+                </a>
+                <a class="btn btn-secondary" href="report.html?status=found">
+                  <i data-lucide="package-check"></i>
+                  Report Found Item
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer reveal">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <div class="footer-brand">
+              <span class="brand-mark" aria-hidden="true"><i data-lucide="search"></i></span>
+              <span class="brand-text">
+                <span class="brand-title">CampusFind</span>
+                <span class="brand-sub">Premier University</span>
+              </span>
+            </div>
+            <p class="footer-copy">
+              A premium lost &amp; found ecosystem designed for students, campuses, and campus community trust.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h4>Navigation</h4>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#how-it-works">How It Works</a></li>
+              <li><a href="#campuses">Campuses</a></li>
+              <li><a href="#lost-found">Lost &amp; Found</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Account</h4>
+            <ul>
+              <li><a href="login.html">Sign In</a></li>
+              <li><a href="signup.html">Create Account</a></li>
+              <li><a href="dashboard.html">Dashboard</a></li>
+              <li><a href="profile.html">Profile</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Safe Links</h4>
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Privacy</a></li>
+              <li><a href="#">Terms</a></li>
+              <li><a href="#">Support</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span>© 2026 CampusFind. Sample demo content for Premier University.</span>
+          <span>Built for student recovery &amp; campus trust.</span>
+        </div>
+      </div>
+    </footer>
+
+    <div class="review-modal" id="reviewModal" aria-hidden="true">
+      <div class="review-modal-panel" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+        <div class="review-modal-inner">
+          <div class="review-modal-top">
+            <div></div>
+            <button type="button" class="review-modal-close" id="closeReviewModal" aria-label="Close review details">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+
+          <div class="review-modal-body">
+            <img class="avatar" id="modalAvatar" src="" alt="" />
+            <div>
+              <strong id="reviewModalTitle">Student Name</strong>
+              <span id="reviewModalRole">Student Role</span>
+            </div>
+          </div>
+
+          <div class="stars" aria-label="5 star review">
+            <i data-lucide="star" fill="currentColor"></i>
+            <i data-lucide="star" fill="currentColor"></i>
+            <i data-lucide="star" fill="currentColor"></i>
+            <i data-lucide="star" fill="currentColor"></i>
+            <i data-lucide="star" fill="currentColor"></i>
+          </div>
+
+          <p class="review-text" id="reviewModalText">Review text</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const root = document.body;
+      const header = document.getElementById('siteHeader');
+      const themeToggle = document.getElementById('themeToggle');
+      const menuToggle = document.getElementById('menuToggle');
+      const mobileMenu = document.getElementById('mobileMenu');
+
+      const savedTheme = localStorage.getItem('campusFindTheme');
+      if (savedTheme === 'dark') {
+        root.classList.add('dark');
+      }
+
+      function syncThemeIcon() {
+        const icon = themeToggle.querySelector('svg');
+        if (!icon) return;
+        const isDark = root.classList.contains('dark');
+        icon.setAttribute('data-lucide', isDark ? 'moon' : 'sun-medium');
+        lucide.createIcons();
+      }
+
+      themeToggle.addEventListener('click', () => {
+        root.classList.toggle('dark');
+        localStorage.setItem('campusFindTheme', root.classList.contains('dark') ? 'dark' : 'light');
+        syncThemeIcon();
+      });
+
+      menuToggle.addEventListener('click', () => {
+        const isOpen = mobileMenu.style.display === 'block';
+        mobileMenu.style.display = isOpen ? 'none' : 'block';
+      });
+
+      window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY > 10;
+        header.classList.toggle('scrolled', scrolled);
+      });
+
+      const revealItems = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      revealItems.forEach((item) => observer.observe(item));
+
+      const counters = document.querySelectorAll('[data-counter]');
+      counters.forEach((counter) => {
+        const target = Number(counter.dataset.counter || 0);
+        let current = 0;
+        const step = Math.max(1, Math.ceil(target / 90));
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) {
+            counter.textContent = target + (target >= 1000 ? '+' : '');
+            clearInterval(timer);
+            return;
+          }
+          counter.textContent = current + (target >= 1000 ? '+' : '');
+        }, 18);
+      });
+
+      const reviewModal = document.getElementById('reviewModal');
+      const reviewModalTitle = document.getElementById('reviewModalTitle');
+      const reviewModalRole = document.getElementById('reviewModalRole');
+      const reviewModalText = document.getElementById('reviewModalText');
+      const modalAvatar = document.getElementById('modalAvatar');
+      const closeReviewModal = document.getElementById('closeReviewModal');
+      const reviewCards = document.querySelectorAll('.review-card');
+
+      function openReviewModal(card) {
+        if (!card || !reviewModal) return;
+
+        reviewModalTitle.textContent = card.dataset.name || 'Student';
+        reviewModalRole.textContent = card.dataset.role || 'Student';
+        reviewModalText.textContent = '“' + (card.dataset.text || '') + '”';
+        modalAvatar.src = card.dataset.image || '';
+        modalAvatar.alt = card.dataset.name || 'Student';
+
+        reviewCards.forEach((item) => item.classList.toggle('is-active', item === card));
+
+        reviewModal.classList.add('open');
+        reviewModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeReviewModalPanel() {
+        if (!reviewModal) return;
+        reviewModal.classList.remove('open');
+        reviewModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        reviewCards.forEach((item) => item.classList.remove('is-active'));
+      }
+
+      reviewCards.forEach((card) => {
+        card.addEventListener('click', () => openReviewModal(card));
+        card.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openReviewModal(card);
+          }
+        });
+      });
+
+      closeReviewModal?.addEventListener('click', closeReviewModalPanel);
+      reviewModal?.addEventListener('click', (event) => {
+        if (event.target === reviewModal) closeReviewModalPanel();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && reviewModal && reviewModal.classList.contains('open')) {
+          closeReviewModalPanel();
+        }
+      });
+
+      function resetHero3D() {
+        const scene = document.querySelector('.campus-scene');
+        const cards = document.querySelectorAll('.floating-card');
+        const searchShell = document.querySelector('.search-shell');
+
+        if (scene) {
+          scene.style.setProperty('--scene-tilt-x', '0deg');
+          scene.style.setProperty('--scene-tilt-y', '0deg');
+        }
+
+        cards.forEach((card) => {
+          card.style.setProperty('--mx', '0px');
+          card.style.setProperty('--my', '0px');
+          card.style.setProperty('--rx', '0deg');
+          card.style.setProperty('--ry', '0deg');
+          card.style.setProperty('--card-scale', '1');
+        });
+
+        if (searchShell) {
+          searchShell.style.setProperty('--mx', '0px');
+          searchShell.style.setProperty('--my', '0px');
+        }
+      }
+
+      const heroVisual = document.querySelector('.hero-visual');
+      const heroCards = Array.from(document.querySelectorAll('.floating-card'));
+      const recentPopoverImage = document.getElementById('recentPopoverImage');
+      const recentPopoverLabel = document.getElementById('recentPopoverLabel');
+      const recentPopoverTitle = document.getElementById('recentPopoverTitle');
+      const recentPopoverMeta = document.getElementById('recentPopoverMeta');
+      const recentPopoverStatus = document.getElementById('recentPopoverStatus');
+      let activeHeroCard = 0;
+      let dragStartX = null;
+      let heroCardLocked = false;
+      let activeRecentItem = 0;
+
+      const recentHeroItems = [
+        {
+          label: 'Recently found',
+          title: 'Black Wallet',
+          meta: 'GEC Campus · 1 hour ago',
+          status: 'Found',
+          image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=240&q=80'
+        },
+        {
+          label: 'Recently lost',
+          title: 'Student ID Card',
+          meta: 'GEC Campus · 2 hours ago',
+          status: 'Lost',
+          image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=240&q=80'
+        },
+        {
+          label: 'Recently found',
+          title: 'Blue Notebook',
+          meta: 'Hazari Line Campus · Today',
+          status: 'Found',
+          image: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&w=240&q=80'
+        },
+        {
+          label: 'Recently lost',
+          title: 'Room Keys',
+          meta: 'Hazari Line Campus · Yesterday',
+          status: 'Lost',
+          image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=240&q=80'
+        }
+      ];
+
+      const recentMiniCards = Array.from(document.querySelectorAll('.recent-mini'));
+      let activeRecentMini = 0;
+
+      function showRecentMini(index) {
+        activeRecentMini = (index + recentMiniCards.length) % recentMiniCards.length;
+        recentMiniCards.forEach((card, cardIndex) => {
+          card.classList.toggle('is-visible', cardIndex === activeRecentMini);
+        });
+      }
+
+      showRecentMini(activeRecentMini);
+      setInterval(() => showRecentMini(activeRecentMini + 1), 1500);
+
+      function updateRecentPopover(item) {
+        if (!item || !recentPopoverImage) return;
+        recentPopoverImage.src = item.image;
+        recentPopoverImage.alt = item.title;
+        recentPopoverLabel.textContent = item.label;
+        recentPopoverTitle.textContent = item.title;
+        recentPopoverMeta.textContent = item.meta;
+        recentPopoverStatus.textContent = item.status;
+        recentPopoverStatus.style.color = item.status === 'Lost' ? 'var(--danger)' : 'var(--success)';
+        recentPopoverStatus.style.background = item.status === 'Lost' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.12)';
+      }
+
+      updateRecentPopover(recentHeroItems[activeRecentItem]);
+
+      function showHeroCard(index) {
+        if (!heroCards.length) return;
+
+        activeHeroCard = Math.max(0, Math.min(heroCards.length - 1, index));
+        const activeGroup = Math.floor(activeHeroCard / 3);
+        const activeSlot = activeHeroCard % 3;
+        heroCards.forEach((card, cardIndex) => {
+          const cardGroup = Math.floor(cardIndex / 3);
+          const isVisible = cardGroup === activeGroup;
+          const isActive = isVisible && cardIndex % 3 === activeSlot;
+          card.classList.toggle('is-card-hidden', !isVisible);
+          card.classList.toggle('is-card-active', isActive);
+          card.classList.toggle('is-card-back', isVisible && !isActive);
+        });
+      }
+
+      showHeroCard(activeHeroCard);
+      setInterval(() => {
+        showHeroCard((activeHeroCard + 1) % heroCards.length);
+      }, 1500);
+
+      function updateHeroFromPointer(clientX, clientY) {
+        if (!heroVisual || window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        const rect = heroVisual.getBoundingClientRect();
+        const inside =
+          clientX >= rect.left &&
+          clientX <= rect.right &&
+          clientY >= rect.top &&
+          clientY <= rect.bottom;
+
+        if (!inside) {
+          resetHero3D();
+          return;
+        }
+
+        const x = ((clientX - rect.left) / rect.width - 0.5) * 18;
+        const y = ((clientY - rect.top) / rect.height - 0.5) * 18;
+        const scene = document.querySelector('.campus-scene');
+        const cards = document.querySelectorAll('.floating-card');
+        const searchShell = document.querySelector('.search-shell');
+        if (!heroCardLocked) {
+          const cardIndex = Math.min(heroCards.length - 1, Math.floor(((clientX - rect.left) / rect.width) * heroCards.length));
+          showHeroCard(cardIndex);
+        }
+
+        if (scene) {
+          scene.style.setProperty('--scene-tilt-x', `${-y * 0.65}deg`);
+          scene.style.setProperty('--scene-tilt-y', `${x * 0.85}deg`);
+        }
+
+        cards.forEach((card, index) => {
+          const offset = (index + 1) * 0.9;
+          card.style.setProperty('--mx', `${x * offset * 0.7}px`);
+          card.style.setProperty('--my', `${y * offset * 0.6}px`);
+          card.style.setProperty('--rx', `${-y * (0.42 + index * 0.08)}deg`);
+          card.style.setProperty('--ry', `${x * (0.58 + index * 0.08)}deg`);
+        });
+
+        if (searchShell) {
+          searchShell.style.setProperty('--mx', `${x * 1.1}px`);
+          searchShell.style.setProperty('--my', `${y * 0.9}px`);
+        }
+      }
+
+      document.addEventListener('pointermove', (event) => {
+        updateHeroFromPointer(event.clientX, event.clientY);
+      });
+
+      document.addEventListener('pointerdown', (event) => {
+        const clickedCard = event.target.closest?.('.floating-card');
+        if (clickedCard && heroCards.includes(clickedCard)) {
+          heroCardLocked = true;
+          showHeroCard(heroCards.indexOf(clickedCard));
+        }
+
+        if (heroVisual && heroVisual.contains(event.target)) {
+          dragStartX = event.clientX;
+        }
+        updateHeroFromPointer(event.clientX, event.clientY);
+      });
+
+      document.addEventListener('pointerup', (event) => {
+        if (dragStartX === null) return;
+
+        const dragDistance = event.clientX - dragStartX;
+        if (Math.abs(dragDistance) > 34) {
+          showHeroCard(activeHeroCard + (dragDistance < 0 ? 1 : -1));
+        }
+        dragStartX = null;
+      });
+
+      heroCards.forEach((card, cardIndex) => {
+        card.addEventListener('click', (event) => {
+          event.stopPropagation();
+          heroCardLocked = true;
+          showHeroCard(cardIndex);
+        });
+      });
+
+      document.addEventListener('pointerleave', resetHero3D);
+      document.addEventListener('touchmove', (event) => {
+        const touch = event.touches[0];
+        if (touch) updateHeroFromPointer(touch.clientX, touch.clientY);
+      }, { passive: true });
+
+      document.addEventListener('touchend', resetHero3D);
+      document.addEventListener('scroll', () => {
+        resetHero3D();
+      }, { passive: true });
+
+      const recentDetailData = {
+        'Student ID Card': { status: 'Lost', description: 'University ID card was lost around the campus.', campus: 'GEC Campus', location: 'Near the main academic building', reporter: 'Nusrat Sultana', email: 'nusrat.sultana@gmail.com', image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=240&q=80' },
+        'Scientific Calculator': { status: 'Lost', description: 'Scientific calculator reported missing after class.', campus: 'WASA Campus', location: 'Science Faculty, Room 204', reporter: 'Tanvir Mahmud', email: 'tanvir.mahmud@gmail.com', image: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?auto=format&fit=crop&w=240&q=80' },
+        'Room Keys': { status: 'Lost', description: 'A small set of room keys has been reported lost.', campus: 'Hazari Line Campus', location: 'Residential area gate', reporter: 'Arif Rahman', email: 'arif.rahman@gmail.com', image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=240&q=80' },
+        'Black Wallet': { status: 'Found', description: 'A black wallet was found near the main gate.', campus: 'GEC Campus', location: 'Main gate security desk', reporter: 'Sadia Karim', email: 'sadia.karim@gmail.com', image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=240&q=80' },
+        'Blue Notebook': { status: 'Found', description: 'Blue notebook found near the library reading area.', campus: 'Hazari Line Campus', location: 'Central library reading area', reporter: 'Mahin Chowdhury', email: 'mahin.chowdhury@gmail.com', image: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&w=240&q=80' },
+        'USB Drive': { status: 'Found', description: 'USB drive found inside a classroom.', campus: 'GEC Campus', location: 'CSE Building, Room 301', reporter: 'Rafi Ahmed', email: 'rafi.ahmed@gmail.com', image: 'https://images.unsplash.com/photo-1625842268584-8f3296236761?auto=format&fit=crop&w=240&q=80' }
+      };
+      const recentDetailModal = document.getElementById('recentDetailModal');
+      const closeRecentDetail = document.getElementById('recentDetailClose');
+      function openRecentDetail(title) {
+        if (!recentDetailData[title]) return;
+        window.location.href = `lost-found.html?item=${encodeURIComponent(title)}`;
+      }
+      document.querySelectorAll('.recent-item').forEach((item) => item.addEventListener('click', () => openRecentDetail(item.querySelector('h4')?.textContent.trim())));
+      document.querySelectorAll('.feature-card').forEach((card) => card.addEventListener('click', () => {
+        const title = card.querySelector('h3')?.textContent.trim() || 'CampusFind feature';
+        const description = card.querySelector('p')?.textContent.trim() || '';
+        document.getElementById('recentDetailTitle').textContent = title;
+        document.getElementById('recentDetailStatus').textContent = 'CampusFind feature';
+        document.getElementById('recentDetailDescription').textContent = description;
+        document.getElementById('recentDetailCampus').textContent = 'GEC · Hazari Line · WASA';
+        document.getElementById('recentDetailLocation').textContent = 'CampusFind platform';
+        document.getElementById('recentDetailReporter').textContent = 'CampusFind Team';
+        document.getElementById('recentDetailEmail').textContent = 'team.campusfind@gmail.com';
+        document.getElementById('recentDetailImage').src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=240&q=80';
+        document.getElementById('recentDetailImage').alt = title;
+        recentDetailModal.classList.add('open');
+        recentDetailModal.setAttribute('aria-hidden', 'false');
+      }));
+      closeRecentDetail?.addEventListener('click', () => { recentDetailModal.classList.remove('open'); recentDetailModal.setAttribute('aria-hidden', 'true'); });
+      recentDetailModal?.addEventListener('click', (event) => { if (event.target === recentDetailModal) closeRecentDetail.click(); });
+
+      /* Reviews + Community = one continuous, centered, auto-sliding feed. */
+      const reviewCarousel = document.querySelector('.review-grid');
+      const commentForm = document.getElementById('commentForm');
+      const commentText = document.getElementById('commentText');
+      const commentStatus = document.getElementById('commentStatus');
+      const communityComments = document.getElementById('communityComments');
+      const commentName = document.getElementById('commentName');
+      const commentRole = document.getElementById('commentRole');
+      const commentImage = document.getElementById('commentImage');
+      let reviewSlideIndex = 0;
+      let reviewSlideTimer = null;
+      let reviewSlides = [];
+      let reviewTouchX = null;
+
+      function profileData(){try{return JSON.parse(localStorage.getItem('campusFindProfile')||'{}')}catch{return {}}}
+      function escapeHtml(value){const d=document.createElement('div');d.textContent=value??'';return d.innerHTML}
+      function initials(name){return (name||'Student').trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'S'}
+      function getComments(){try{return JSON.parse(localStorage.getItem('campusFindComments')||'[]')}catch{return []}}
+      function saveComments(list){localStorage.setItem('campusFindComments',JSON.stringify(list.slice(0,30)))}
+      async function readCommunityResponse(response){const raw=await response.text();if(!raw.trim())return null;try{return JSON.parse(raw)}catch{return null}}
+      function commentKey(c){return `${c.name||''}|${c.text||''}|${c.studentId||''}`.toLowerCase()}
+      function readCommentImage(file){
+        if(!file)return Promise.resolve('');
+        if(file.size>4*1024*1024)return Promise.reject(new Error('Please choose an image under 4 MB.'));
+        return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('The image could not be read.'));reader.readAsDataURL(file);});
+      }
+
+      const signedProfile=profileData();
+      if(commentName && signedProfile.fullName) commentName.value=signedProfile.fullName;
+      if(commentRole && (signedProfile.about || signedProfile.campus)) commentRole.value=signedProfile.campus ? `${signedProfile.campus} Student` : 'CampusFind Student';
+
+      function starsMarkup(){return '<div class="stars" aria-label="5 star review"><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i></div>'}
+      function makeCommunitySlide(c){
+        const shell=document.createElement('div');
+        shell.className='review-card-shell reveal community-review-slide';
+        const avatar=c.profileImage
+          ? `<img class="comment-avatar-img" src="${escapeHtml(c.profileImage)}" alt="${escapeHtml(c.name||'Student')}" loading="lazy">`
+          : `<span class="comment-avatar-fallback">${escapeHtml(initials(c.name))}</span>`;
+        shell.innerHTML=`<article class="review-card community-review-card" tabindex="0" data-name="${escapeHtml(c.name||'CampusFind Student')}" data-role="${escapeHtml(c.role||'CampusFind Student')}" data-text="${escapeHtml(c.text||'')}" data-image="${escapeHtml(c.profileImage||'')}">
+          <span class="community-badge"><i data-lucide="message-circle-heart"></i> Community review</span>
+          <div class="review-top">${avatar}<div class="review-person"><strong>${escapeHtml(c.name||'CampusFind Student')}</strong><span>${escapeHtml(c.role||'CampusFind Student')}</span></div></div>
+          ${starsMarkup()}
+          <p class="review-text">“${escapeHtml(c.text||'')}”</p>
+        </article>`;
+        const card=shell.querySelector('.review-card');
+        card.addEventListener('click',()=>openReviewModal(card));
+        card.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openReviewModal(card)}});
+        return shell;
+      }
+
+      function paintReviewSlide(){
+        reviewSlides.forEach((slide,i)=>{
+          slide.classList.toggle('is-review-active',i===reviewSlideIndex);
+          slide.classList.toggle('is-review-before',i<reviewSlideIndex);
+          slide.classList.toggle('is-review-next',i>reviewSlideIndex);
+        });
+        const dots=document.querySelectorAll('.review-feed-dot');
+        dots.forEach((dot,i)=>dot.classList.toggle('active',i===reviewSlideIndex));
+      }
+      function refreshReviewSlides(){
+        reviewSlides=reviewCarousel ? Array.from(reviewCarousel.querySelectorAll('.review-card-shell')) : [];
+        if(!reviewSlides.length)return;
+        reviewSlideIndex=Math.max(0,Math.min(reviewSlideIndex,reviewSlides.length-1));
+        paintReviewSlide();
+        renderReviewDots();
+      }
+      function advanceReviews(){
+        if(reviewSlides.length<2)return;
+        reviewSlideIndex=(reviewSlideIndex+1)%reviewSlides.length;
+        paintReviewSlide();
+      }
+      function startReviewSlides(){
+        clearInterval(reviewSlideTimer);
+        refreshReviewSlides();
+        if(reviewSlides.length>1)reviewSlideTimer=setInterval(advanceReviews,3400);
+      }
+      function renderReviewDots(){
+        if(!reviewCarousel)return;
+        let controls=document.getElementById('reviewFeedControls');
+        if(!controls){
+          controls=document.createElement('div');controls.id='reviewFeedControls';controls.className='review-feed-controls';
+          reviewCarousel.parentElement.insertBefore(controls,reviewCarousel.nextSibling);
+        }
+        controls.innerHTML=reviewSlides.map((_,i)=>`<button type="button" class="review-feed-dot${i===reviewSlideIndex?' active':''}" aria-label="Show review ${i+1}"></button>`).join('');
+        controls.querySelectorAll('.review-feed-dot').forEach((dot,i)=>dot.addEventListener('click',()=>{reviewSlideIndex=i;paintReviewSlide();startReviewSlides()}));
+      }
+      function insertCommunitySlide(post, focus=false){
+        if(!reviewCarousel)return;
+        const shell=makeCommunitySlide(post);
+        const active=reviewSlides[reviewSlideIndex];
+        if(active && active.nextSibling) reviewCarousel.insertBefore(shell,active.nextSibling); else reviewCarousel.appendChild(shell);
+        if(window.lucide)lucide.createIcons();
+        refreshReviewSlides();
+        const newIndex=reviewSlides.indexOf(shell);
+        if(focus && newIndex>=0){
+          reviewSlideIndex=newIndex;
+          requestAnimationFrame(paintReviewSlide);
+        }
+      }
+      function renderStoredCommunityReviews(){
+        reviewCarousel?.querySelectorAll('.community-review-slide').forEach(x=>x.remove());
+        const list=getComments();
+        list.slice(0,20).reverse().forEach(c=>{
+          const shell=makeCommunitySlide(c);
+          reviewCarousel?.appendChild(shell);
+        });
+        if(window.lucide)lucide.createIcons();
+        startReviewSlides();
+      }
+      async function loadCommunity(){
+        try{
+          const r=await fetch('/api/community');
+          if(!r.ok)return;
+          const d=await r.json();
+          if(!d.posts?.length)return;
+          const posts=d.posts.map(x=>({...x,createdAt:x.createdAt||new Date().toISOString()}));
+          saveComments(posts);
+          renderStoredCommunityReviews();
+        }catch{}
+      }
+
+      commentText?.addEventListener('input',()=>{commentStatus.textContent=`${commentText.value.length} / 280`});
+      commentForm?.addEventListener('submit',async(event)=>{
+        event.preventDefault();
+        const profile=profileData();
+        const name=commentName.value.trim()||profile.fullName||'CampusFind Student';
+        const role=commentRole.value.trim()||`${profile.campus||'CampusFind'} Student`;
+        const text=commentText.value.trim();
+        if(!name||!text)return;
+        let profileImage='';
+        try{profileImage=await readCommentImage(commentImage?.files?.[0])}catch(error){commentStatus.textContent=error.message;return}
+        const post={name,role,text,createdAt:new Date().toISOString(),firebaseUID:localStorage.getItem('firebaseUID')||'',studentId:profile.studentId||'',profileImage:profileImage||profile.profileImage||''};
+        try{
+          const response=await fetch('/api/community',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(post)});
+          const result=await readCommunityResponse(response);
+          if(!response.ok||!result?.success) throw new Error(result?.message||'Comment could not be saved to MongoDB.');
+          const saved=result.post||post;
+          const comments=getComments();comments.unshift(saved);saveComments(comments);
+          insertCommunitySlide(saved,true);
+          commentForm.reset();
+          if(profile.fullName)commentName.value=profile.fullName;
+          commentStatus.textContent='0 / 280';
+          commentForm.classList.add('post-synced');
+          setTimeout(()=>commentForm.classList.remove('post-synced'),900);
+        }catch(error){commentStatus.textContent=error.message||'MongoDB is unavailable.';}
+      });
+
+      reviewCarousel?.addEventListener('pointerdown',e=>{reviewTouchX=e.clientX;clearInterval(reviewSlideTimer)});
+      reviewCarousel?.addEventListener('pointerup',e=>{
+        if(reviewTouchX===null)return;
+        const dx=e.clientX-reviewTouchX;reviewTouchX=null;
+        if(Math.abs(dx)>45 && reviewSlides.length>1){reviewSlideIndex=(reviewSlideIndex+(dx<0?1:-1)+reviewSlides.length)%reviewSlides.length;paintReviewSlide()}
+        startReviewSlides();
+      });
+
+      // User-created reviews now live in the same carousel as the built-in reviews.
+      loadCommunity();
+      lucide.createIcons();
+      syncThemeIcon();
+    </script>
+  </body>
+</html>

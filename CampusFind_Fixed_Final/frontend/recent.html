@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Recent Activity | CampusFind</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="app.css">
+    <style>
+        .recent-page .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            white-space: nowrap;
+            text-decoration: none;
+            color: inherit
+        }
+
+        .recent-page .brand * {
+            text-decoration: none;
+            border-bottom: none
+        }
+
+        .recent-page .brand-mark {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px
+        }
+
+        .recent-page .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            align-items: flex-start
+        }
+
+        .recent-page .brand-title {
+            font-size: 1.16rem;
+            line-height: 1.05;
+            font-weight: 800;
+            letter-spacing: -.045em
+        }
+
+        .recent-page .brand-sub {
+            display: inline-block;
+            font-size: .59rem;
+            line-height: 1.2;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: none;
+            padding-bottom: 0
+        }
+
+        .recent-page .recent-report-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 17px;
+            border-radius: 13px;
+            color: #fff;
+            background: linear-gradient(135deg, #1d4ed8, #4f7df3);
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 14px 30px rgba(29, 78, 216, .22);
+            transition: transform .22s ease, box-shadow .22s ease
+        }
+
+        .recent-page .recent-report-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 38px rgba(29, 78, 216, .3)
+        }
+
+        .recent-page .recent-report-cta svg {
+            width: 17px;
+            height: 17px
+        }
+
+        .recent-page .cf-page-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+            margin-bottom: 26px
+        }
+
+        .recent-page .cf-page-hero h1 {
+            margin: .35rem 0 .5rem;
+            letter-spacing: -.045em
+        }
+
+        .recent-page .cf-page-hero p {
+            color: var(--muted);
+            max-width: 640px;
+            line-height: 1.6
+        }
+
+        .recent-page .cf-page-card {
+            background: rgba(255, 255, 255, .76);
+            border: 1px solid rgba(15, 23, 42, .08);
+            border-radius: 22px;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, .12);
+            overflow: hidden
+        }
+
+        .recent-page .recent-hero-cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin: 20px 0 28px
+        }
+
+        .recent-page .recent-hero-card {
+            padding: 18px 18px 16px
+        }
+
+        .recent-page .recent-hero-card small {
+            display: inline-block;
+            margin-bottom: 10px;
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: #64748b
+        }
+
+        .recent-page .recent-hero-card strong {
+            display: block;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            letter-spacing: -.05em;
+            margin-bottom: 8px
+        }
+
+        .recent-page .recent-hero-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: .82rem;
+            line-height: 1.5
+        }
+
+        .recent-page .recent-hero-card.lost strong {
+            color: #dc2626
+        }
+
+        .recent-page .recent-hero-card.found strong {
+            color: #059669
+        }
+
+        .recent-page .recent-hero-card.community strong {
+            color: #1d4ed8
+        }
+
+        .recent-page .cf-recent-board {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px
+        }
+
+        .recent-page .recent-column {
+            padding: 18px
+        }
+
+        .recent-page .recent-column-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px
+        }
+
+        .recent-page .recent-column-head h3 {
+            margin: 0;
+            font-size: 1.1rem
+        }
+
+        .recent-page .recent-count {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(29, 78, 216, .08);
+            color: #1d4ed8;
+            font-size: .7rem;
+            font-weight: 800
+        }
+
+        .recent-page .recent-list {
+            display: grid;
+            gap: 12px
+        }
+
+        .recent-page .recent-item {
+            display: grid;
+            grid-template-columns: 70px 1fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid rgba(15, 23, 42, .08);
+            border-radius: 16px;
+            background: rgba(248, 250, 255, .7)
+        }
+
+        .recent-page .recent-item img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 14px
+        }
+
+        .recent-page .recent-item h4 {
+            margin: 0 0 4px;
+            font-size: .98rem
+        }
+
+        .recent-page .recent-item p {
+            margin: 0;
+            color: var(--muted);
+            font-size: .78rem;
+            line-height: 1.4
+        }
+
+        .recent-page .recent-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 9px;
+            border-radius: 999px;
+            font-size: .65rem;
+            font-weight: 900;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            white-space: nowrap
+        }
+
+        .recent-page .recent-status.lost {
+            background: rgba(239, 68, 68, .1);
+            color: #dc2626
+        }
+
+        .recent-page .recent-status.found {
+            background: rgba(16, 185, 129, .1);
+            color: #059669
+        }
+
+        .recent-page .recent-empty {
+            padding: 22px 12px;
+            text-align: center;
+            color: var(--muted);
+            border: 1px dashed rgba(100, 116, 139, .3);
+            border-radius: 14px
+        }
+
+        @media(max-width:700px) {
+            .recent-page .cf-page-hero {
+                align-items: flex-start;
+                flex-direction: column
+            }
+
+            .recent-page .recent-report-cta {
+                width: 100%;
+                justify-content: center
+            }
+
+            .recent-page .recent-hero-cards,
+            .recent-page .cf-recent-board {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+    <script defer src="app.js"></script>
+</head>
+
+<body class="recent-page">
+    <header class="header">
+        <div class="container nav"><a class="brand" href="index.html" aria-label="CampusFind home"><span
+                    class="brand-mark" aria-hidden="true"><i data-lucide="search"></i></span><span
+                    class="brand-text"><span class="brand-title">CampusFind</span><span class="brand-sub">Premier
+                        University</span></span></a>
+            <div class="nav-actions"><a href="index.html">Home</a><a href="lost-found.html">Lost &amp; Found</a><a
+                    href="report.html">Post Item</a><button class="theme" id="themeBtn" type="button"
+                    aria-label="Toggle theme"><i data-lucide="sun-medium"></i></button></div>
+        </div>
+    </header>
+    <main class="cf-page-shell">
+        <div class="cf-page-hero">
+            <div><span class="cf-eyebrow">Live activity</span>
+                <h1>What happened recently?</h1>
+                <p>New lost and found reports across all three Premier University campuses.</p>
+                <div id="dbStatus" class="db-status">Checking MongoDB Atlas...</div>
+            </div><a class="recent-report-cta" href="report.html"><i data-lucide="plus"></i> Report an item</a>
+        </div>
+        <section class="recent-hero-cards" id="heroCards" aria-live="polite"></section>
+        <div class="cf-recent-board" id="board"></div>
+    </main>
+    <script>
+        (function () {
+            const state = { latestId: null, pollTimer: null };
+
+            function readApiResponse(response) {
+                return response.text().then(raw => {
+                    if (!raw || !raw.trim()) return null;
+                    try { return JSON.parse(raw); } catch { return null; }
+                });
+            }
+
+            function formatTime(value) {
+                if (!value) return 'Recently';
+                const date = new Date(value);
+                if (Number.isNaN(date.getTime())) return 'Recently';
+                const minutes = Math.max(1, Math.round((Date.now() - date.getTime()) / 60000));
+                if (minutes < 60) return minutes + ' min ago';
+                const hours = Math.round(minutes / 60);
+                if (hours < 24) return hours + ' hr ago';
+                const days = Math.round(hours / 24);
+                return days + ' day' + (days === 1 ? '' : 's') + ' ago';
+            }
+
+            function normalizeReport(item) {
+                const status = String(item?.status || '').toLowerCase();
+                return {
+                    id: item?._id || item?.id || `${status}-${item?.title || 'report'}-${Date.now()}`,
+                    title: item?.title || 'Campus report',
+                    status,
+                    campus: item?.campus ? String(item.campus).replace(/ Campus$/i, '') + ' Campus' : 'Campus',
+                    location: item?.location || 'Campus area',
+                    description: item?.description || 'A new community update is available.',
+                    image: item?.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80',
+                    createdAt: item?.createdAt || new Date().toISOString(),
+                    time: formatTime(item?.createdAt)
+                };
+            }
+
+            function renderHeroCards(reports) {
+                const container = document.getElementById('heroCards');
+                if (!container) return;
+
+                const lost = reports.filter(item => item.status === 'lost').slice(0, 1);
+                const found = reports.filter(item => item.status === 'found').slice(0, 1);
+                const community = Math.max(0, reports.length);
+
+                const cards = [
+                    {
+                        key: 'lost',
+                        label: 'Lost items',
+                        value: lost.length ? String(lost.length) : '0',
+                        text: lost[0] ? `${lost[0].title} · ${lost[0].campus}` : 'No recent lost reports yet',
+                        className: 'lost'
+                    },
+                    {
+                        key: 'found',
+                        label: 'Found items',
+                        value: found.length ? String(found.length) : '0',
+                        text: found[0] ? `${found[0].title} · ${found[0].campus}` : 'No recent found reports yet',
+                        className: 'found'
+                    },
+                    {
+                        key: 'community',
+                        label: 'Community updates',
+                        value: String(community),
+                        text: reports[0] ? `${reports[0].title} · ${reports[0].campus}` : 'Waiting for fresh campus activity',
+                        className: 'community'
+                    }
+                ];
+
+                container.innerHTML = cards.map(card => `
+                    <article class="cf-page-card recent-hero-card ${card.className}">
+                        <small>${card.label}</small>
+                        <strong>${card.value}</strong>
+                        <p>${card.text}</p>
+                    </article>
+                `).join('');
+            }
+
+            function renderBoard(reports) {
+                const board = document.getElementById('board');
+                if (!board) return;
+
+                const lost = reports.filter(item => item.status === 'lost');
+                const found = reports.filter(item => item.status === 'found');
+
+                function itemMarkup(item) {
+                    return `
+                        <article class="recent-item">
+                            <img src="${item.image}" alt="${item.title}">
+                            <div>
+                                <h4>${item.title}</h4>
+                                <p>${item.campus} · ${item.location}</p>
+                                <p>${item.time}</p>
+                            </div>
+                            <span class="recent-status ${item.status}">${item.status}</span>
+                        </article>
+                    `;
+                }
+
+                const lostMarkup = lost.length ? lost.slice(0, 6).map(itemMarkup).join('') : '<div class="recent-empty">No lost items reported yet.</div>';
+                const foundMarkup = found.length ? found.slice(0, 6).map(itemMarkup).join('') : '<div class="recent-empty">No found items reported yet.</div>';
+
+                board.innerHTML = `
+                    <section class="cf-page-card recent-column">
+                        <div class="recent-column-head">
+                            <h3>Recently Lost</h3>
+                            <span class="recent-count">${lost.length} ${lost.length === 1 ? 'report' : 'reports'}</span>
+                        </div>
+                        <div class="recent-list">${lostMarkup}</div>
+                    </section>
+                    <section class="cf-page-card recent-column">
+                        <div class="recent-column-head">
+                            <h3>Recently Found</h3>
+                            <span class="recent-count">${found.length} ${found.length === 1 ? 'report' : 'reports'}</span>
+                        </div>
+                        <div class="recent-list">${foundMarkup}</div>
+                    </section>
+                `;
+            }
+
+            function showNotification(item) {
+                if (!item) return;
+                const existing = document.querySelector('.cf-live-notification');
+                if (existing) existing.remove();
+
+                const note = document.createElement('div');
+                note.className = 'cf-live-notification show';
+                note.innerHTML = `
+                    <button class="cf-live-close" aria-label="Close">×</button>
+                    <div class="cf-live-icon"><i data-lucide="${item.status === 'lost' ? 'alert-circle' : 'check-circle'}"></i></div>
+                    <div class="cf-live-copy">
+                        <span>${item.status === 'lost' ? 'NEW LOST ITEM' : 'NEW FOUND ITEM'}</span>
+                        <strong>${item.title}</strong>
+                        <p>${item.campus} · ${item.location}</p>
+                        <a href="report.html">View update →</a>
+                    </div>
+                `;
+                note.querySelector('.cf-live-close').addEventListener('click', () => note.remove());
+                document.body.appendChild(note);
+                if (window.lucide) lucide.createIcons();
+                setTimeout(() => note.remove(), 4200);
+            }
+
+            async function loadRecentData() {
+                try {
+                    const [reportRes, communityRes] = await Promise.all([
+                        fetch('/api/reports'),
+                        fetch('/api/community')
+                    ]);
+
+                    const reportData = reportRes.ok ? await readApiResponse(reportRes) : null;
+                    const communityData = communityRes.ok ? await readApiResponse(communityRes) : null;
+
+                    const reports = (reportData?.reports || []).map(normalizeReport).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    const communityPosts = (communityData?.posts || []).map(post => ({
+                        id: post?._id || `community-${post?.name || 'update'}`,
+                        title: post?.name || 'Campus community update',
+                        status: 'community',
+                        campus: 'Campus community',
+                        location: 'Just now',
+                        description: post?.text || 'Community update',
+                        image: post?.profileImage || 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=700&q=80',
+                        createdAt: post?.createdAt || new Date().toISOString(),
+                        time: formatTime(post?.createdAt)
+                    }));
+
+                    const latestSource = reports[0] || communityPosts[0];
+                    if (latestSource && latestSource.id !== state.latestId) {
+                        state.latestId = latestSource.id;
+                        showNotification(latestSource);
+                    }
+
+                    const merged = [...reports, ...communityPosts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    renderHeroCards(merged.length ? merged : reports);
+                    renderBoard(reports);
+
+                    const online = Boolean(reportRes.ok && reportData?.success);
+                    const statusNode = document.getElementById('dbStatus');
+                    if (statusNode) {
+                        statusNode.textContent = online ? '● MongoDB Atlas connected' : '● MongoDB offline';
+                        statusNode.classList.toggle('offline', !online);
+                    }
+                } catch (error) {
+                    const statusNode = document.getElementById('dbStatus');
+                    if (statusNode) {
+                        statusNode.textContent = '● Backend unavailable';
+                        statusNode.classList.add('offline');
+                    }
+                    renderHeroCards([]);
+                    renderBoard([]);
+                }
+            }
+
+            function init() {
+                renderHeroCards([]);
+                renderBoard([]);
+                loadRecentData();
+                state.pollTimer = setInterval(loadRecentData, 12000);
+            }
+
+            init();
+        })();
+    </script>
+</body>
+
+</html>

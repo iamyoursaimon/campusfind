@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8" />
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    />
+
+    <meta
+        name="description"
+        content="Create a CampusFind account."
+    />
+
+    <title>Sign Up | CampusFind</title>
+
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    />
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    />
+
+
+    <!-- Authentication CSS -->
+
+    <link
+        rel="stylesheet"
+        href="auth.css"
+    />
+
+
+    <!-- Lucide Icons -->
+
+    <script
+        src="https://unpkg.com/lucide@latest"
+    ></script>
+
+<link rel="stylesheet" href="app.css" />
+<script defer src="app.js"></script>
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header class="header">
+
+    <div class="container nav">
+
+
+        <!-- BRAND -->
+
+        <a
+            class="brand"
+            href="index.html"
+        >
+
+            <span class="brand-mark">
+                C
+            </span>
+
+
+            <span>
+
+                <strong>
+                    CampusFind
+                </strong>
+
+                <small>
+                    Premier University
+                </small>
+
+            </span>
+
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="nav-actions">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="lost-found.html">
+                Lost &amp; Found
+            </a>
+
+            <a href="report.html">
+                Post Item
+            </a>
+
+
+            <!-- THEME BUTTON -->
+
+            <button
+                class="theme"
+                type="button"
+                aria-label="Toggle theme"
+            >
+
+                <i
+                    data-lucide="sun-medium"
+                ></i>
+
+            </button>
+
+
+            <a href="login.html">
+                Sign In
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="container main">
+
+    <div class="auth-layout">
+
+
+        <!-- =====================================
+             LEFT SIDE / ART
+        ====================================== -->
+
+        <section class="auth-art">
+
+
+            <span
+                class="eyebrow"
+                style="color:#d7e2ff"
+            >
+                Join the community
+            </span>
+
+
+            <h1>
+
+                Make every lost item
+                easier to find.
+
+            </h1>
+
+
+            <p>
+
+                Build a trusted campus identity,
+                post reports, and receive updates
+                from the campuses you care about.
+
+            </p>
+
+
+            <div class="art-stack">
+
+
+                <div class="art-card">
+
+                    <strong>
+                        3 campuses
+                    </strong>
+
+                    <span>
+                        GEC · Hazari Line · WASA
+                    </span>
+
+                </div>
+
+
+
+                <div class="art-card">
+
+                    <strong>
+                        One connected board
+                    </strong>
+
+                    <span>
+                        Lost and found reports
+                        in one place
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             SIGNUP CARD
+        ====================================== -->
+
+        <section class="auth-card">
+
+
+            <span class="eyebrow">
+                Create account
+            </span>
+
+
+            <h2>
+                Sign up
+            </h2>
+
+
+            <p class="intro">
+
+                Start with your university
+                details and join CampusFind.
+
+            </p>
+
+
+
+            <!-- SIGNUP FORM -->
+
+            <form id="signupForm">
+
+
+                <!-- FULL NAME -->
+
+                <label>
+
+                    Full name
+
+                    <input
+                        id="fullName"
+                        type="text"
+                        required
+                        autocomplete="name"
+                        placeholder="Your name"
+                    />
+
+                </label>
+
+
+
+                <!-- EMAIL -->
+
+                <label>
+
+                    University email
+
+                    <input
+                        id="email"
+                        type="email"
+                        required
+                        autocomplete="email"
+                        placeholder="yourname@gmail.com"
+                    />
+
+                </label>
+
+
+
+                <!-- PASSWORD -->
+
+                <label>
+
+                    Password
+
+                    <input
+                        id="password"
+                        type="password"
+                        required
+                        minlength="6"
+                        autocomplete="new-password"
+                        placeholder="At least 6 characters"
+                    />
+
+                </label>
+
+
+
+                <!-- STUDENT ID -->
+
+                <label>
+                    Student ID
+                    <div class="student-id-input">
+                        <span>0222510005</span>
+                        <input id="studentIdLast6" inputmode="numeric" maxlength="6" pattern="\d{6}" required placeholder="Last 6 digits" aria-label="Last 6 digits of student ID" />
+                    </div>
+                    <small class="id-help">The first 10 digits are fixed. Enter the last 6 digits of your Student ID.</small>
+                </label>
+
+
+                <!-- CAMPUS -->
+
+                <label>
+
+                    Preferred campus
+
+                    <select
+                        id="campus"
+                        required
+                    >
+
+                        <option value="">
+                            Select your campus
+                        </option>
+
+                        <option value="GEC">
+                            GEC Campus
+                        </option>
+
+                        <option value="Hazari Line">
+                            Hazari Line Campus
+                        </option>
+
+                        <option value="WASA">
+                            WASA Campus
+                        </option>
+
+                    </select>
+
+                </label>
+
+
+
+                <!-- SUBMIT BUTTON -->
+
+                <button
+                    class="submit"
+                    type="submit"
+                    id="signupButton"
+                >
+
+                    <span>
+                        Create account
+                    </span>
+
+                    <i
+                        data-lucide="user-plus"
+                    ></i>
+
+                </button>
+
+
+            </form>
+
+
+
+            <!-- MESSAGE -->
+
+            <div
+                class="notice"
+                id="signupMessage"
+                style="margin-top:16px"
+            >
+
+                Create your CampusFind account
+                using Firebase Authentication.
+
+            </div>
+
+
+
+            <!-- LOGIN LINK -->
+
+            <p class="switch">
+
+                Already registered?
+
+                <a href="login.html">
+                    Sign in
+                </a>
+
+            </p>
+
+
+        </section>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+
+<!-- =========================================
+     FIREBASE + MONGODB SIGNUP SCRIPT
+========================================= -->
+
+<script type="module">
+
+
+    /*
+    ==========================================
+    IMPORT FIREBASE AUTH FUNCTION
+    ==========================================
+    */
+
+    import {
+        registerUser
+    } from "./auth.js";
+
+
+
+    /*
+    ==========================================
+    GET HTML ELEMENTS
+    ==========================================
+    */
+
+    const signupForm =
+        document.getElementById("signupForm");
+
+
+    const signupButton =
+        document.getElementById("signupButton");
+
+
+    const message =
+        document.getElementById("signupMessage");
+
+
+    const fullNameInput =
+        document.getElementById("fullName");
+
+
+    const emailInput =
+        document.getElementById("email");
+
+
+    const passwordInput =
+        document.getElementById("password");
+
+
+    const campusInput =
+        document.getElementById("campus");
+
+    const studentIdLast6Input =
+        document.getElementById("studentIdLast6");
+
+    async function readApiResponse(response) {
+        const raw = await response.text();
+        if (!raw.trim()) {
+            return { success: false, message: `Server returned an empty response (${response.status}).` };
+        }
+        try {
+            return JSON.parse(raw);
+        } catch {
+            return { success: false, message: `Server returned invalid JSON (${response.status}).` };
+        }
+    }
+
+
+
+    /*
+    ==========================================
+    SIGNUP FORM
+    ==========================================
+    */
+
+    signupForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            /*
+            ==================================
+            GET USER INPUT
+            ==================================
+            */
+
+            const fullName =
+                fullNameInput.value.trim();
+
+
+            const email =
+                emailInput.value.trim();
+
+
+            const password =
+                passwordInput.value;
+
+
+            const campus =
+                campusInput.value;
+
+            const last6 = studentIdLast6Input.value.trim();
+            const studentId = "0222510005" + last6;
+
+
+
+            /*
+            ==================================
+            VALIDATION
+            ==================================
+            */
+
+            if (!fullName) {
+
+                message.textContent =
+                    "Please enter your full name.";
+
+                message.style.color = "red";
+
+                return;
+
+            }
+
+
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                message.textContent = "Please enter a valid email address, such as yourname@gmail.com.";
+                message.style.color = "red";
+                return;
+            }
+
+            if (!email) {
+
+                message.textContent =
+                    "Please enter your university email.";
+
+                message.style.color = "red";
+
+                return;
+
+            }
+
+
+            if (password.length < 6) {
+
+                message.textContent =
+                    "Password must be at least 6 characters.";
+
+                message.style.color = "red";
+
+                return;
+
+            }
+
+
+            if (!campus) {
+
+                message.textContent =
+                    "Please select your campus.";
+
+                message.style.color = "red";
+
+                return;
+
+            }
+
+            if (!/^\d{6}$/.test(last6)) {
+                message.textContent = "Please enter exactly 6 digits from your student ID.";
+                message.style.color = "red";
+                return;
+            }
+
+
+
+            /*
+            ==================================
+            DISABLE BUTTON
+            ==================================
+            */
+
+            signupButton.disabled = true;
+
+
+            signupButton.innerHTML = `
+                <span>Creating account...</span>
+            `;
+
+
+            message.textContent =
+                "Creating your CampusFind account...";
+
+            message.style.color = "";
+
+
+
+            /*
+            ==================================
+            TRY
+            ==================================
+            */
+
+            try {
+
+
+                /*
+                ------------------------------
+                CREATE FIREBASE ACCOUNT
+                ------------------------------
+                */
+
+                const result =
+                    await registerUser(
+                        email,
+                        password
+                    );
+
+
+
+                /*
+                ==================================
+                FIREBASE SUCCESS
+                ==================================
+                */
+
+                if (result.success) {
+
+
+                    /*
+                    ------------------------------
+                    GET FIREBASE UID
+                    ------------------------------
+                    */
+
+                    const firebaseUID =
+                        result.user.uid;
+
+
+
+                    /*
+                    ------------------------------
+                    SAVE LOCAL DATA
+                    ------------------------------
+                    */
+
+                    const studentId = "0222510005" + last6;
+
+                    localStorage.setItem("userName", fullName);
+                    localStorage.setItem("selectedCampus", campus);
+                    localStorage.setItem("firebaseUID", firebaseUID);
+                    localStorage.setItem("userEmail", email);
+                    localStorage.setItem("userStudentId", studentId);
+                    localStorage.setItem("campusFindProfile", JSON.stringify({
+                        fullName,
+                        studentId,
+                        email,
+                        phone: "",
+                        campus,
+                        location: "",
+                        about: ""
+                    }));
+
+
+
+                    /*
+                    ==================================
+                    SAVE USER TO MONGODB
+                    ==================================
+                    */
+
+                    message.textContent =
+                        "Saving your profile...";
+
+
+                    const mongoResponse =
+                        await fetch(
+                            "/api/users",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+
+                                    firebaseUID:
+                                        firebaseUID,
+
+                                    fullName:
+                                        fullName,
+
+                                    email:
+                                        email,
+
+                                    campus:
+                                        campus,
+
+                                    studentId:
+                                        studentId
+
+                                })
+
+                            }
+                        );
+
+
+
+                    /*
+                    GET MONGODB RESPONSE
+                    */
+
+                    const mongoData =
+                        await readApiResponse(mongoResponse);
+
+
+
+                    if (!mongoResponse.ok) {
+                        console.warn("MongoDB profile sync unavailable:", mongoData);
+                        message.textContent = "Account created. Profile saved locally; cloud sync will happen when MongoDB Atlas is available.";
+                    } else {
+                        message.textContent = "Account created successfully and profile synced.";
+                    }
+
+                    /*
+                    ==================================
+                    CONTINUE EVEN IF ATLAS IS OFFLINE
+                    ==================================
+                    */
+
+
+                    message.style.color =
+                        "green";
+
+
+
+                    setTimeout(() => { window.location.href = "profile.html"; }, 500);
+
+                    return;
+
+                }
+
+
+
+                /*
+                ==================================
+                FIREBASE ERROR
+                ==================================
+                */
+
+                message.textContent =
+                    result.error ||
+                    "Unable to create account.";
+
+                message.style.color =
+                    "red";
+
+
+                signupButton.disabled =
+                    false;
+
+
+                signupButton.innerHTML = `
+                    <span>Create account</span>
+                    <i data-lucide="user-plus"></i>
+                `;
+
+
+                lucide.createIcons();
+
+
+            }
+
+
+            /*
+            ==================================
+            UNEXPECTED ERROR
+            ==================================
+            */
+
+            catch (error) {
+
+
+                console.error(
+                    "Signup error:",
+                    error
+                );
+
+
+                message.textContent =
+                    error.message ||
+                    "Something went wrong. Please try again.";
+
+                message.style.color =
+                    "red";
+
+
+                signupButton.disabled =
+                    false;
+
+
+                signupButton.innerHTML = `
+                    <span>Create account</span>
+                    <i data-lucide="user-plus"></i>
+                `;
+
+
+                lucide.createIcons();
+
+            }
+
+        }
+
+    );
+
+</script>
+
+
+
+<!-- =========================================
+     LUCIDE INITIALIZATION
+========================================= -->
+
+<script>
+
+    lucide.createIcons();
+
+</script>
+
+
+</body>
+
+</html>
