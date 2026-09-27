@@ -250,6 +250,10 @@
 <script type="module">
 import { loginUser } from "./auth.js";
 
+const API_BASE = window.location.protocol === "file:"
+    ? "http://localhost:5000"
+    : window.location.origin;
+
 const form=document.getElementById("loginForm");
 const emailInput=document.getElementById("email");
 const passwordInput=document.getElementById("password");
@@ -278,14 +282,20 @@ form.addEventListener("submit", async (event)=>{
   let profile={};
   try{profile=JSON.parse(localStorage.getItem("campusFindProfile")||"{}")}catch{}
   try{
-    const response=await fetch(`/api/users/profile/${encodeURIComponent(result.user.uid)}`);
+    const response=await fetch(`${API_BASE}/api/users/profile/${encodeURIComponent(result.user.uid)}`);
     if(response.ok){const data=await readApiResponse(response);if(data.success)profile={...profile,...data.user};}
   }catch{}
   profile={...profile,email:result.user.email||email,studentId,fullName:profile.fullName||((email.split("@")[0]||"Student").replace(/[._-]+/g," ").replace(/\b\w/g,m=>m.toUpperCase())),campus:profile.campus||localStorage.getItem("selectedCampus")||"GEC"};
   localStorage.setItem("campusFindProfile",JSON.stringify(profile));
   localStorage.setItem("userName",profile.fullName);localStorage.setItem("selectedCampus",profile.campus);
   // If this is an older account, migrate the requested 16-digit ID into MongoDB.
-  try{await fetch('/api/users/profile',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...profile,firebaseUID:result.user.uid,studentId})});}catch{}
+    try{
+        const saveResponse=await fetch(`${API_BASE}/api/users/profile`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...profile,firebaseUID:result.user.uid,studentId})});
+        if(!saveResponse.ok){
+            const saveResult=await readApiResponse(saveResponse);
+            message.textContent=saveResult.message||"Profile could not be saved to MongoDB.";
+        }
+    }catch{message.textContent="MongoDB profile sync is unavailable.";}
   message.textContent="Signed in successfully. Opening your profile...";
   setTimeout(()=>window.location.href="profile.html",300);
 });
