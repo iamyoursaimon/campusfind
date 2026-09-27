@@ -1117,6 +1117,10 @@
   ========================= -->
 
   <script>
+    const API_BASE = window.location.protocol === 'file:'
+      ? 'https://campusfind-backend-e9z6.onrender.com'
+      : window.location.origin;
+
 
     const body = document.body;
 
@@ -1325,7 +1329,7 @@
 
           const response =
             await fetch(
-              "/api/reports",
+              `${API_BASE}/api/reports`,
               {
                 method: "POST",
 
