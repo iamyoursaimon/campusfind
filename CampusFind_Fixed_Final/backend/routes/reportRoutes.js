@@ -1,6 +1,8 @@
 const express = require("express");
 const Report = require("../models/Report");
 const Comment = require("../models/Comment");
+const User = require("../models/User");
+const { notifyUsersAboutReport } = require("../services/emailService");
 const router = express.Router();
 const { isMongoConnected } = require("../config/db");
 
@@ -18,6 +20,13 @@ router.post("/", async (req, res) => {
     const { status, title, category, campus, location, description, email, reporterName, studentId, firebaseUID, image } = req.body;
     if (!status || !title || !campus || !location) return res.status(400).json({ success: false, message: "Required fields are missing." });
     const report = await Report.create({ status, title, category, campus: String(campus).replace(/ Campus$/i, ""), location, description, email, reporterName, studentId, firebaseUID, image });
+    const subscribers = await User.find({
+      email: { $exists: true, $nin: ["", email] },
+      ...(firebaseUID ? { firebaseUID: { $ne: firebaseUID } } : {})
+    }).select("email -_id").lean();
+    notifyUsersAboutReport(report, subscribers.map(user => user.email)).catch(error => {
+      console.error("Report email notification failed:", error.message);
+    });
     res.status(201).json({ success: true, report });
   } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 });
