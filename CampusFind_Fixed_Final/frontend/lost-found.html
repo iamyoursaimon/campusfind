@@ -409,7 +409,7 @@
         document.getElementById('detailCampus').textContent = item.campusName;
         document.getElementById('detailLocation').textContent = item.type;
         document.getElementById('detailOwner').textContent = item.owner;
-        document.getElementById('detailEmail').textContent = `${item.title.toLowerCase().replaceAll(' ', '.')}@gmail.com`;
+        document.getElementById('detailEmail').textContent = item.email || 'Not provided';
         document.getElementById('detailDate').textContent = item.date;
         detailModal.classList.add('open');
         detailModal.setAttribute('aria-hidden', 'false');
