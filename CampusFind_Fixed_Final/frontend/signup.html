@@ -431,6 +431,10 @@
         registerUser
     } from "./auth.js";
 
+    const API_BASE = window.location.protocol === "file:"
+        ? "http://localhost:5000"
+        : window.location.origin;
+
 
 
     /*
@@ -690,7 +694,7 @@
 
                     const mongoResponse =
                         await fetch(
-                            "/api/users",
+                            `${API_BASE}/api/users`,
                             {
                                 method: "POST",
 
