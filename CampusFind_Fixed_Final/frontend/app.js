@@ -3,7 +3,7 @@
   // CAMPUSFIND BACKEND CONFIG
   // ================================
   const API_BASE = window.location.protocol === 'file:'
-    ? 'https://campusfind-backend-e9z6.onrender.com'
+    ? 'http://localhost:5000'
     : window.location.origin;
 
   const themeKey='campusFindTheme';
