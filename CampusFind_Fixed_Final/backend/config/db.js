@@ -28,6 +28,7 @@ async function connectDB() {
 
   try {
     await mongoose.connect(uri, {
+      dbName: process.env.MONGODB_DB || "campusfind",
       serverSelectionTimeoutMS: 8000
     });
 
