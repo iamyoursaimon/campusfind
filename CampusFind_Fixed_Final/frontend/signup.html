@@ -737,8 +737,16 @@
 
 
                     if (!mongoResponse.ok) {
-                        console.warn("MongoDB profile sync unavailable:", mongoData);
-                        message.textContent = "Account created. Profile saved locally; cloud sync will happen when MongoDB Atlas is available.";
+                        console.warn("MongoDB profile sync failed:", mongoData);
+                        message.textContent = mongoData.message || "Profile could not be saved to MongoDB Atlas.";
+                        message.style.color = "red";
+                        signupButton.disabled = false;
+                        signupButton.innerHTML = `
+                            <span>Try again</span>
+                            <i data-lucide="refresh-cw"></i>
+                        `;
+                        lucide.createIcons();
+                        return;
                     } else {
                         message.textContent = "Account created successfully and profile synced.";
                     }
