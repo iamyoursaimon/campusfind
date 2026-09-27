@@ -2,7 +2,9 @@
   // ================================
   // CAMPUSFIND BACKEND CONFIG
   // ================================
-  const API_BASE = 'https://campusfind-backend-e9z6.onrender.com';
+  const API_BASE = window.location.protocol === 'file:'
+    ? 'https://campusfind-backend-e9z6.onrender.com'
+    : window.location.origin;
 
   const themeKey='campusFindTheme';
   const body=document.body;

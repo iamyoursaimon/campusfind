@@ -77,6 +77,11 @@
 
       html {
         scroll-behavior: smooth;
+        overflow-x: clip;
+      }
+
+      body {
+        overflow-x: clip;
       }
 
       body {
@@ -2164,6 +2169,12 @@
           padding: 1.1rem 0.95rem;
         }
 
+        .hero-visual { min-height: 470px; overflow: hidden; }
+        .campus-scene { width: 100%; left: 0; height: 430px; }
+        .floating-card { width: 38% !important; min-width: 0; }
+        .floating-card h4,
+        .floating-card p { overflow-wrap: anywhere; }
+
         .recent-popover {
           left: 2%;
           right: 2%;
@@ -2374,61 +2385,7 @@
               <div class="scene-orb one"></div>
               <div class="scene-orb two"></div>
 
-              <div class="floating-card find">
-                <span class="badge"><i data-lucide="search"></i> Find</span>
-                <h4>Lost Wallet</h4>
-                <p>Reported near GEC campus</p>
-                <div class="mini-stat">
-                  <span>Today</span>
-                  <strong>02</strong>
-                </div>
-              </div>
-
-              <div class="floating-card report">
-                <span class="badge"><i data-lucide="package-check"></i> Found</span>
-                <h4>ID Card</h4>
-                <p>Recovered by library desk</p>
-                <div class="mini-stat">
-                  <span>Claims</span>
-                  <strong>09</strong>
-                </div>
-              </div>
-
-              <div class="floating-card location">
-                <span class="badge"><i data-lucide="map-pin"></i> Campus</span>
-                <h4>Premier University</h4>
-                <p>GEC · Hazari Line · WASA</p>
-              </div>
-
-              <div class="floating-card library">
-                <span class="badge"><i data-lucide="library"></i> Desk</span>
-                <h4>Earbuds</h4>
-                <p>Found near the library desk</p>
-                <div class="mini-stat">
-                  <span>New</span>
-                  <strong>04</strong>
-                </div>
-              </div>
-
-              <div class="floating-card book">
-                <span class="badge"><i data-lucide="book-open"></i> Books</span>
-                <h4>Notebook</h4>
-                <p>Lost around Hazari Line campus</p>
-                <div class="mini-stat">
-                  <span>Matches</span>
-                  <strong>07</strong>
-                </div>
-              </div>
-
-              <div class="floating-card keys">
-                <span class="badge"><i data-lucide="key-round"></i> Found</span>
-                <h4>Keys</h4>
-                <p>Handed in at the WASA office</p>
-                <div class="mini-stat">
-                  <span>Today</span>
-                  <strong>03</strong>
-                </div>
-              </div>
+              <div id="heroFloatingCards" aria-live="polite"></div>
 
               <div class="recent-popover" id="recentPopover" aria-live="polite">
                 <article class="recent-mini">
@@ -3106,13 +3063,72 @@
       }
 
       const heroVisual = document.querySelector('.hero-visual');
-      const heroCards = Array.from(document.querySelectorAll('.floating-card'));
+      const heroFloatingCards = document.getElementById('heroFloatingCards');
+      const heroCardSlots = ['find', 'report', 'location', 'library', 'book', 'keys'];
+      const heroFallbackItems = [
+        { title: 'Lost Wallet', status: 'lost', campus: 'GEC', location: 'Main gate', icon: 'search' },
+        { title: 'Student ID Card', status: 'found', campus: 'GEC', location: 'Library desk', icon: 'package-check' },
+        { title: 'Premier University', status: 'community', campus: 'GEC · Hazari Line · WASA', location: 'Three campuses', icon: 'map-pin' },
+        { title: 'Wireless Earbuds', status: 'found', campus: 'WASA', location: 'Library desk', icon: 'library' },
+        { title: 'Blue Notebook', status: 'lost', campus: 'Hazari Line', location: 'Student lounge', icon: 'book-open' },
+        { title: 'Room Keys', status: 'found', campus: 'WASA', location: 'Office desk', icon: 'key-round' }
+      ];
+      const heroStatusLabel = { lost: 'Lost', found: 'Found', community: 'Campus' };
+      const heroStatusIcon = { lost: 'search', found: 'package-check', community: 'map-pin' };
+      let heroCards = [];
+      let activeHeroCard = 0;
+
+      function escapeHeroText(value) {
+        return String(value || '').replace(/[&<>"']/g, (character) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[character]));
+      }
+
+      function renderHeroFloatingCards(items) {
+        if (!heroFloatingCards) return;
+
+        const reports = items.length ? items : heroFallbackItems;
+        const cards = heroCardSlots.map((slot, index) => {
+          const item = reports[index % reports.length];
+          const status = item.status === 'lost' || item.status === 'found' ? item.status : 'community';
+          const label = heroStatusLabel[status];
+          const icon = item.icon || heroStatusIcon[status];
+          const campus = item.campus || 'Campus';
+          const location = item.location || 'Campus area';
+          const count = status === 'community' ? reports.length : reports.filter(report => report.status === status).length;
+
+          return `<div class="floating-card ${slot}">
+            <span class="badge"><i data-lucide="${escapeHeroText(icon)}"></i> ${label}</span>
+            <h4>${escapeHeroText(item.title)}</h4>
+            <p>${escapeHeroText(campus)} · ${escapeHeroText(location)}</p>
+            <div class="mini-stat"><span>${status === 'lost' ? 'Reports' : status === 'found' ? 'Found' : 'Updates'}</span><strong>${count}</strong></div>
+          </div>`;
+        }).join('');
+
+        heroFloatingCards.innerHTML = cards;
+        heroCards = Array.from(heroFloatingCards.querySelectorAll('.floating-card'));
+        if (window.lucide) lucide.createIcons();
+        showHeroCard(activeHeroCard % heroCards.length);
+      }
+
+      renderHeroFloatingCards([]);
+
+      const heroApiBase = window.location.protocol === 'file:'
+        ? 'https://campusfind-backend-e9z6.onrender.com'
+        : window.location.origin;
+
+      fetch(`${heroApiBase}/api/reports`)
+        .then((response) => response.ok ? response.json() : null)
+        .then((data) => {
+          const reports = (data?.reports || []).filter((report) => report?.title);
+          if (reports.length) renderHeroFloatingCards(reports);
+        })
+        .catch(() => {});
       const recentPopoverImage = document.getElementById('recentPopoverImage');
       const recentPopoverLabel = document.getElementById('recentPopoverLabel');
       const recentPopoverTitle = document.getElementById('recentPopoverTitle');
       const recentPopoverMeta = document.getElementById('recentPopoverMeta');
       const recentPopoverStatus = document.getElementById('recentPopoverStatus');
-      let activeHeroCard = 0;
       let dragStartX = null;
       let heroCardLocked = false;
       let activeRecentItem = 0;
