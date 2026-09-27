@@ -3082,7 +3082,7 @@
               <span class="recent-status ${status}">${label}</span>
             </div>`).join('') : '<div class="recent-empty">No reports yet.</div>';
 
-          return `<article class="recent-column reveal"><div class="recent-column-head"><h3>Recently ${label}</h3><span class="recent-count">${items.length} ${items.length === 1 ? 'report' : 'reports'}</span></div><div class="recent-list">${content}</div><div class="recent-footer"><a href="lost-found.html">View all ${label.toLowerCase()} items <i data-lucide="arrow-right"></i></a></div></article>`;
+          return `<article class="recent-column"><div class="recent-column-head"><h3>Recently ${label}</h3><span class="recent-count">${items.length} ${items.length === 1 ? 'report' : 'reports'}</span></div><div class="recent-list">${content}</div><div class="recent-footer"><a href="lost-found.html">View all ${label.toLowerCase()} items <i data-lucide="arrow-right"></i></a></div></article>`;
         };
 
         homeRecentBoard.innerHTML = renderColumn('lost', 'Lost') + renderColumn('found', 'Found');
@@ -3423,7 +3423,7 @@
       }
       async function loadCommunity(){
         try{
-          const r=await fetch('/api/community');
+          const r=await fetch(`${heroApiBase}/api/community`);
           if(!r.ok)return;
           const d=await r.json();
           if(!d.posts?.length)return;
@@ -3445,7 +3445,7 @@
         try{profileImage=await readCommentImage(commentImage?.files?.[0])}catch(error){commentStatus.textContent=error.message;return}
         const post={name,role,text,createdAt:new Date().toISOString(),firebaseUID:localStorage.getItem('firebaseUID')||'',studentId:profile.studentId||'',profileImage:profileImage||profile.profileImage||''};
         try{
-          const response=await fetch('/api/community',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(post)});
+          const response=await fetch(`${heroApiBase}/api/community`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(post)});
           const result=await readCommunityResponse(response);
           if(!response.ok||!result?.success) throw new Error(result?.message||'Comment could not be saved to MongoDB.');
           const saved=result.post||post;
