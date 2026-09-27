@@ -301,6 +301,9 @@
     <script>
         (function () {
             const state = { latestId: null, pollTimer: null };
+            const API_BASE = window.location.protocol === 'file:'
+                ? 'https://campusfind-backend-e9z6.onrender.com'
+                : window.location.origin;
 
             function readApiResponse(response) {
                 return response.text().then(raw => {
@@ -445,8 +448,8 @@
             async function loadRecentData() {
                 try {
                     const [reportRes, communityRes] = await Promise.all([
-                        fetch('/api/reports'),
-                        fetch('/api/community')
+                        fetch(`${API_BASE}/api/reports`),
+                        fetch(`${API_BASE}/api/community`)
                     ]);
 
                     const reportData = reportRes.ok ? await readApiResponse(reportRes) : null;
