@@ -2532,75 +2532,7 @@
             <p>See what students have recently reported across GEC, Hazari Line, and WASA campuses.</p>
           </div>
 
-          <div class="recent-board">
-            <article class="recent-column reveal">
-              <div class="recent-column-head">
-                <h3>Recently Lost</h3>
-                <span class="recent-count">3 reports</span>
-              </div>
-              <div class="recent-list">
-                <div class="recent-item">
-                  <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=240&q=80" alt="Student ID card" loading="lazy" />
-                  <div>
-                    <h4>Student ID Card</h4>
-                    <p>GEC Campus · 2 hours ago</p>
-                  </div>
-                  <span class="recent-status lost">Lost</span>
-                </div>
-                <div class="recent-item">
-                  <img src="https://images.unsplash.com/photo-1587145820266-a5951ee6f620?auto=format&fit=crop&w=240&q=80" alt="Scientific calculator" loading="lazy" />
-                  <div>
-                    <h4>Scientific Calculator</h4>
-                    <p>WASA Campus · 5 hours ago</p>
-                  </div>
-                  <span class="recent-status lost">Lost</span>
-                </div>
-                <div class="recent-item">
-                  <img src="https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=240&q=80" alt="Room keys" loading="lazy" />
-                  <div>
-                    <h4>Room Keys</h4>
-                    <p>Hazari Line Campus · Yesterday</p>
-                  </div>
-                  <span class="recent-status lost">Lost</span>
-                </div>
-              </div>
-              <div class="recent-footer"><a href="lost-found.html">View all lost items <i data-lucide="arrow-right"></i></a></div>
-            </article>
-
-            <article class="recent-column reveal">
-              <div class="recent-column-head">
-                <h3>Recently Found</h3>
-                <span class="recent-count">3 reports</span>
-              </div>
-              <div class="recent-list">
-                <div class="recent-item">
-                  <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=240&q=80" alt="Black wallet" loading="lazy" />
-                  <div>
-                    <h4>Black Wallet</h4>
-                    <p>GEC Campus · 1 hour ago</p>
-                  </div>
-                  <span class="recent-status found">Found</span>
-                </div>
-                <div class="recent-item">
-                  <img src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&w=240&q=80" alt="Blue notebook" loading="lazy" />
-                  <div>
-                    <h4>Blue Notebook</h4>
-                    <p>Hazari Line Campus · Today</p>
-                  </div>
-                  <span class="recent-status found">Found</span>
-                </div>
-                <div class="recent-item">
-                  <img src="https://images.unsplash.com/photo-1625842268584-8f3296236761?auto=format&fit=crop&w=240&q=80" alt="USB drive" loading="lazy" />
-                  <div>
-                    <h4>USB Drive</h4>
-                    <p>GEC Campus · Yesterday</p>
-                  </div>
-                  <span class="recent-status found">Found</span>
-                </div>
-              </div>
-              <div class="recent-footer"><a href="lost-found.html">View all found items <i data-lucide="arrow-right"></i></a></div>
-            </article>
-          </div>
+          <div class="recent-board" id="homeRecentBoard" aria-live="polite"></div>
         </div>
       </section>
 
@@ -3124,6 +3056,49 @@
           if (reports.length) renderHeroFloatingCards(reports);
         })
         .catch(() => {});
+
+      const homeRecentBoard = document.getElementById('homeRecentBoard');
+
+      function recentTime(value) {
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return 'Recently';
+        const minutes = Math.max(1, Math.round((Date.now() - date.getTime()) / 60000));
+        if (minutes < 60) return `${minutes} min ago`;
+        const hours = Math.round(minutes / 60);
+        if (hours < 24) return `${hours} hr ago`;
+        const days = Math.round(hours / 24);
+        return `${days} day${days === 1 ? '' : 's'} ago`;
+      }
+
+      function renderHomeRecent(reports) {
+        if (!homeRecentBoard) return;
+
+        const renderColumn = (status, label) => {
+          const items = reports.filter((report) => report.status === status).slice(0, 3);
+          const content = items.length ? items.map((item) => `
+            <div class="recent-item" data-title="${escapeHeroText(item.title)}">
+              <img src="${escapeHeroText(item.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=240&q=80')}" alt="${escapeHeroText(item.title)}" loading="lazy" />
+              <div><h4>${escapeHeroText(item.title)}</h4><p>${escapeHeroText(item.campus || 'Campus')} · ${escapeHeroText(item.location || 'Campus area')} · ${recentTime(item.createdAt)}</p></div>
+              <span class="recent-status ${status}">${label}</span>
+            </div>`).join('') : '<div class="recent-empty">No reports yet.</div>';
+
+          return `<article class="recent-column reveal"><div class="recent-column-head"><h3>Recently ${label}</h3><span class="recent-count">${items.length} ${items.length === 1 ? 'report' : 'reports'}</span></div><div class="recent-list">${content}</div><div class="recent-footer"><a href="lost-found.html">View all ${label.toLowerCase()} items <i data-lucide="arrow-right"></i></a></div></article>`;
+        };
+
+        homeRecentBoard.innerHTML = renderColumn('lost', 'Lost') + renderColumn('found', 'Found');
+        if (window.lucide) lucide.createIcons();
+      }
+
+      function loadHomeRecent() {
+        fetch(`${heroApiBase}/api/reports`)
+          .then((response) => response.ok ? response.json() : null)
+          .then((data) => renderHomeRecent((data?.reports || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))))
+          .catch(() => renderHomeRecent([]));
+      }
+
+      renderHomeRecent([]);
+      loadHomeRecent();
+      setInterval(loadHomeRecent, 15000);
       const recentPopoverImage = document.getElementById('recentPopoverImage');
       const recentPopoverLabel = document.getElementById('recentPopoverLabel');
       const recentPopoverTitle = document.getElementById('recentPopoverTitle');
@@ -3313,10 +3288,12 @@
       const recentDetailModal = document.getElementById('recentDetailModal');
       const closeRecentDetail = document.getElementById('recentDetailClose');
       function openRecentDetail(title) {
-        if (!recentDetailData[title]) return;
         window.location.href = `lost-found.html?item=${encodeURIComponent(title)}`;
       }
-      document.querySelectorAll('.recent-item').forEach((item) => item.addEventListener('click', () => openRecentDetail(item.querySelector('h4')?.textContent.trim())));
+      homeRecentBoard?.addEventListener('click', (event) => {
+        const item = event.target.closest('.recent-item');
+        if (item) openRecentDetail(item.dataset.title || item.querySelector('h4')?.textContent.trim());
+      });
       document.querySelectorAll('.feature-card').forEach((card) => card.addEventListener('click', () => {
         const title = card.querySelector('h3')?.textContent.trim() || 'CampusFind feature';
         const description = card.querySelector('p')?.textContent.trim() || '';
