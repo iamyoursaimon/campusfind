@@ -3,6 +3,20 @@ const mongoose = require("mongoose");
 let connected = false;
 let connecting = false;
 let lastError = "";
+let retryTimer = null;
+
+function scheduleReconnect() {
+  if (retryTimer || isMongoConnected()) {
+    return;
+  }
+
+  retryTimer = setTimeout(() => {
+    retryTimer = null;
+    connectDB();
+  }, 15000);
+
+  retryTimer.unref();
+}
 
 async function connectDB() {
   // Already connected
@@ -51,6 +65,9 @@ async function connectDB() {
     return false;
   } finally {
     connecting = false;
+    if (!isMongoConnected()) {
+      scheduleReconnect();
+    }
   }
 }
 
@@ -66,6 +83,7 @@ mongoose.connection.on("connected", () => {
 mongoose.connection.on("disconnected", () => {
   connected = false;
   console.warn("⚠️ MongoDB Atlas disconnected.");
+  scheduleReconnect();
 });
 
 mongoose.connection.on("error", (error) => {
