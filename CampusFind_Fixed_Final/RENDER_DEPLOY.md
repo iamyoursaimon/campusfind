@@ -17,15 +17,20 @@ For a manual Web Service use:
 
 ## Environment variables
 
-Add this in the Render service Environment tab:
+The local `backend/.env` file is ignored by Git and is not uploaded to Render. Add the variables below in the Render service's **Environment** tab instead. `MONGODB_URI` is required:
 
 ```text
 MONGODB_URI=mongodb+srv://USERNAME:PASSWORD@CLUSTER.mongodb.net/campusfind?retryWrites=true&w=majority
+MONGODB_DB=campusfind
 ```
 
-The Atlas password must be URL encoded. In MongoDB Atlas Network Access, allow `0.0.0.0/0` because Render uses dynamic outbound IPs. Use a database user with only the required database permissions.
+Keep the Atlas URI private. Its password must be URL encoded. In MongoDB Atlas Network Access, allow `0.0.0.0/0` because Render uses dynamic outbound IPs. Use a database user with only the required database permissions.
 
-`FRONTEND_ORIGIN` is optional when Render serves the frontend from this same service. Set it only when the frontend is hosted on a separate domain.
+Email notifications are optional. To enable them, also set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, and optionally `MAIL_FROM` in Render. Never commit real values for these variables.
+
+`CLIENT_ORIGIN` is optional when Render serves the frontend from this same service. If the frontend is hosted on a separate domain, set it to that exact origin. `FRONTEND_ORIGIN` is also accepted for compatibility.
+
+Save the environment changes in Render and redeploy the service.
 
 ## Verify
 
