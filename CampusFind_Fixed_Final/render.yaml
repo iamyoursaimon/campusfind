@@ -2,14 +2,12 @@ services:
   - type: web
     name: campusfind
     runtime: node
-    rootDir: backend
-    buildCommand: npm install
-    startCommand: npm start
+    rootDir: CampusFind_Fixed_Final
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
     healthCheckPath: /api/health
     envVars:
       - key: MONGODB_URI
         sync: false
       - key: MONGODB_DB
         value: campusfind
-      - key: FRONTEND_ORIGIN
-        sync: false

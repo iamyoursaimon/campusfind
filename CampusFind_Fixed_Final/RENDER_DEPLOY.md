@@ -2,17 +2,17 @@
 
 ## GitHub
 
-Create a GitHub repository and upload the contents of `CampusFind_Fixed_Final`. Do not upload `backend/.env` when it contains a real password.
+The project is in the `CampusFind_Fixed_Final` folder of the GitHub repository. Connect that repository to the new Render account. Do not upload `backend/.env` when it contains a real password.
 
 ## Render Web Service
 
-Use **New + -> Blueprint** and select the GitHub repository. Render reads `render.yaml`.
+Use **New + -> Blueprint**, select the GitHub repository, and set the Blueprint file path to `CampusFind_Fixed_Final/render.yaml`.
 
 For a manual Web Service use:
 
-- Root Directory: `backend`
-- Build Command: `npm install`
-- Start Command: `npm start`
+- Root Directory: `CampusFind_Fixed_Final`
+- Build Command: `cd backend && npm install`
+- Start Command: `cd backend && npm start`
 - Health Check Path: `/api/health`
 
 ## Environment variables
